@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ bootstrap }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <title>WebNotebook</title>
+</head>
+<body class="bg-info-subtle">
+    <header>
+        <nav class="navbar bg-info-subtle">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
+                WebNotebook
+              </a>
+              <div class="authorized-user" id="authorized">
+                <span></span>
+                <img src="{{ circle }}" alt="profile-pic" width="30">
+              </div>
+              <div class="authorized-user" id="unauthorized">
+                <a href="login" class="btn btn-outline-primary">Войти</a>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main class="main">
+
+      <div class="sidebar">
+        <ul class="nav-sidebar">
+            <li class="nav-sidebar__link"><a href="signin">Мой профиль</a></li>
+            <li class="nav-sidebar__link"><a href="#">Мои тетради</a></li>
+        </ul>
+        <div class="sidebar__line"></div>
+        
+        <label for="input-file">Загрузить <img src="{{ plus }}" alt="" width="25"></label>
+        <input type="file" id="input-file" name="input-file" accept="application/pdf">
+
+        <!-- <a href="#" class="sidebar__btn btn btn-outline-primary">
+          Загрузить      
+          <img src="sources/icons/plus.svg" alt="" width="25"> 
+        </a> -->
+      </div>
+
+      <div class="body bg-light-subtle">
+          <h3 class="body__title">Мои тетради</h3>
+
+          <div class="notes row">
+
+            <div class="note-wrapper col-xl-3 col-md-4">
+              <div class="note-card card" style="width: 18rem;">
+                <div class="note-card__pic card-img-top">
+                  <img src="{{ doc }}" alt="doc" width="30">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Тетрадь 1</h5>
+                  <div class="card__btn-group">
+                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <div class="dropdown">
+                      <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ three_dots }}" alt="" width="20">
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                        <li><a class="dropdown-item" href="#">Скачать</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-wrapper col-xl-3 col-md-4">
+              <div class="note-card card" style="width: 18rem;">
+                <div class="note-card__pic card-img-top">
+                  <img src="{{ doc }}" alt="doc" width="30">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Тетрадь 1</h5>
+                  <div class="card__btn-group">
+                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <div class="dropdown">
+                      <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ three_dots }}" alt="" width="20">
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                        <li><a class="dropdown-item" href="#">Скачать</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-wrapper col-xl-3 col-md-4">
+              <div class="note-card card" style="width: 18rem;">
+                <div class="note-card__pic card-img-top">
+                  <img src="{{ doc }}" alt="doc" width="30">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Тетрадь 1</h5>
+                  <div class="card__btn-group">
+                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <div class="dropdown">
+                      <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ three_dots }}" alt="" width="20">
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                        <li><a class="dropdown-item" href="#">Скачать</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-wrapper col-xl-3 col-md-4">
+              <div class="note-card card" style="width: 18rem;">
+                <div class="note-card__pic card-img-top">
+                  <img src="{{ doc }}" alt="doc" width="30">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Тетрадь 1</h5>
+                  <div class="card__btn-group">
+                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <div class="dropdown">
+                      <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ three_dots }}" alt="" width="20">
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                        <li><a class="dropdown-item" href="#">Скачать</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="note-wrapper col-xl-3 col-md-4">
+              <div class="note-card card" style="width: 18rem;">
+                <div class="note-card__pic card-img-top">
+                  <img src="{{ doc }}" alt="doc" width="30">
+                </div>
+                <div class="card-body">
+                  <h5 class="card-title">Тетрадь 1</h5>
+                  <div class="card__btn-group">
+                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <div class="dropdown">
+                      <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ three_dots }}" alt="" width="20">
+                      </a>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Редактировать</a></li>
+                        <li><a class="dropdown-item" href="#">Скачать</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Удалить</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+      </div>
+    </main>
+
+  <script src="{{ bootstrap_js }}"></script>
+  <script src="{{ user_js }}"></script>
+</body>
+</html>

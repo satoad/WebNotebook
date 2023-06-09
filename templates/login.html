@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ bootstrap }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <title>WebNotebook</title>
+</head>
+<body class="bg-info-subtle">
+    <header>
+        <nav class="navbar bg-info-subtle">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="index">
+                <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
+                WebNotebook
+              </a>
+              
+            </div>
+          </nav>
+    </header>
+    <main class="main">
+        <div class="sidebar">
+            <ul class="nav-sidebar">
+                <li class="nav-sidebar__link"><a href="profile">Мой профиль</a></li>
+                <li class="nav-sidebar__link"><a href="index">Мои тетради</a></li>
+            </ul>
+            <div class="sidebar__line"></div>
+          </div>
+
+        <div class="body bg-light-subtle">
+          <h3 class="body__title">Вход</h3>
+          
+          <div class="signin-wrapper border rounded">
+            <form action="#" class="signin" autocomplete="on">
+
+              <div class="signin__input-wrapper">
+                <label for="uemail">Email</label>
+                <input type="email" name="uemail" required="required" class="signin__input" placeholder="Введите почту">
+              </div>
+
+              <div class="signin__input-wrapper">
+                <label for="upassword">Пароль</label>
+                <input type="password" name="upassword" required="required" class="signin__input" placeholder="Введите пароль">
+              </div>
+
+              <div class="signin__input-wrapper">
+                <input type="submit" value="Вход" class="btn btn-primary">
+              </div>
+            </form>
+
+            <div class="to-signin border-top">
+              <span>Ещё не зарегистрированы?</span>
+              <a href="signin" class="btn btn-outline-primary">Регистрация</a>
+            </div>
+          </div>
+        </div>
+    </main>
+</body>
+</html>
