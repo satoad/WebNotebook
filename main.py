@@ -60,6 +60,23 @@ def index():
     return render_template('index.html', **param)
 
 
+@app.route('/notebook')
+def notebook():
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    param = {}
+    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
+    param['style'] = url_for('static', filename='css/style.css')
+    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    param['circle'] = url_for('static', filename='sources/icons/person-circle.svg')
+    param['arrow_left'] = url_for('static', filename='sources/icons/arrow-left.svg')
+    param['arrow_right'] = url_for('static', filename='sources/icons/arrow-right.svg')
+    param['download'] = url_for('static', filename='sources/icons/download.svg')
+    param['username'] = current_user.name
+    param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
+    return render_template('notebook.html', **param)
+
+
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
     form = SigninForm()
@@ -104,18 +121,6 @@ def login():
         param['message'] = 'Неверный логин или пароль'
         return render_template('login.html', **param)
     return render_template('login.html', **param)
-
-
-@app.route('/notebook')
-def notebook():
-    param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['circle'] = url_for('static', filename='sources/icons/person-circle.svg')
-    param['user_js'] = url_for('static', filename='scripts/user.js')
-    param['geometriya'] = url_for('static', filename='sources/test-pdf/geometrija-7-9-kl_-atanasjan.pdf')
-    return render_template('notebook.html', **param)
 
 
 @app.route('/profile')
