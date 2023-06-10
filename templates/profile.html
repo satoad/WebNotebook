@@ -32,17 +32,13 @@
           <h3 class="body__title">Мой профиль</h3>
           
           <div class="user-profile border rounded">
-            <div class="user__login border-bottom">
-              <span>Логин</span>
-              <span>user0001</span>
-            </div>
             <div class="user__name border-bottom">
               <span>Имя</span>
-              <span>Вася</span>
+              <span>{{ username }}</span>
             </div>
             <div class="user__email border-bottom">
               <span>Email</span>
-              <span>admin@admin.com</span>
+              <span>{{ email }}</span>
             </div>
             <div class="profile-btn">
               <button type="button" class="btn btn-outline-primary">Сменить пароль</button>

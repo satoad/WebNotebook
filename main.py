@@ -97,10 +97,14 @@ def notebook():
 
 @app.route('/profile')
 def profile():
+    if not current_user.is_authenticated:
+        return redirect('/login')
     param = {}
     param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
     param['style'] = url_for('static', filename='css/style.css')
     param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    param['username'] = current_user.name
+    param['email'] = current_user.email
     return render_template('profile.html', **param)
 
 
