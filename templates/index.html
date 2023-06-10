@@ -37,14 +37,14 @@
             <li class="nav-sidebar__link"><a href="#">Мои тетради</a></li>
         </ul>
         <div class="sidebar__line"></div>
-        
-        <label for="input-file">Загрузить <img src="{{ plus }}" alt="" width="25"></label>
-        <input type="file" id="input-file" name="input-file" accept="application/pdf">
-
-        <!-- <a href="#" class="sidebar__btn btn btn-outline-primary">
-          Загрузить      
-          <img src="sources/icons/plus.svg" alt="" width="25"> 
-        </a> -->
+        <form action="#" class="upload" method = "post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <p>
+            {{ form.file.label }}<br>
+            {{ form.file(accept="image/png, image/jpg") }}<br>
+          </p>
+          <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+        </form>
       </div>
 
       <div class="body bg-light-subtle">

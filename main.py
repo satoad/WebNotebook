@@ -4,7 +4,10 @@ from data.users import User
 from forms.signinform import SigninForm
 from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
+from forms.fileuploadform import FileuploadForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from werkzeug.utils import secure_filename
+import os
 
 
 app = Flask(__name__)
@@ -19,9 +22,10 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
+    form = FileuploadForm()
     param = {}
     param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
     param['style'] = url_for('static', filename='css/style.css')
@@ -33,8 +37,16 @@ def index():
     param['doc'] = url_for('static', filename='sources/icons/doc.svg')
     param['three_dots'] = url_for('static', filename='sources/icons/three-dots-vertical.svg')
     param['authorized'] = current_user.is_authenticated
+    param['form'] = form
     if current_user.is_authenticated:
         param['username'] = current_user.name
+    if form.validate_on_submit():
+        print('wtf')
+        f = form.file.data
+        filename = secure_filename(f.filename)
+        f.save(os.path.join('files', filename
+        ))
+        return render_template('index.html', **param)
     return render_template('index.html', **param)
 
 
