@@ -1,6 +1,10 @@
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, url_for, render_template, redirect
+from data import db_session
+from flask_bcrypt import Bcrypt
+from data.users import User
 
 app = Flask(__name__)
+bcrypt = Bcrypt(app)
 
 
 @app.route('/')
@@ -21,21 +25,27 @@ def index():
 
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
-    if request.method == 'GET':
-        param = {}
-        param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-        param['style'] = url_for('static', filename='css/style.css')
-        param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-        return render_template('signin.html', **param)
-    elif request.method == 'POST':
-        print(request.form['email'])
-        print(request.form['password'])
-        print(request.form['class'])
-        print(request.form['file'])
-        print(request.form['about'])
-        print(request.form['accept'])
-        print(request.form['sex'])
-        return "Форма отправлена"
+    param = {}
+    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
+    param['style'] = url_for('static', filename='css/style.css')
+    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    if request.method == 'POST':
+        if request.form['upassword'] != request.form['upassword-confirm']:
+            # /todo Добавить поле для сообщений об ошибках
+            return render_template('signin.html', **param)
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == request.form['uemail']).first():
+            # /todo Добавить поле для сообщений об ошибках
+            return render_template('signin.html', **param)
+        user = User(
+            name=request.form['uname'],
+            email=request.form['uemail']
+        )
+        user.set_password(request.form['upassword'])
+        db_sess.add(user)
+        db_sess.commit()
+        return redirect('/login')
+    return render_template('signin.html', **param)
 
 
 @app.route('/login', methods=['POST', 'GET'])
@@ -79,4 +89,5 @@ def profile():
 
 
 if __name__ == '__main__':
+    db_session.global_init("db/users.db")
     app.run(port=8080, host='127.0.0.1')
