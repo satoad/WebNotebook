@@ -11,6 +11,9 @@ flask = "*"
 flask-bcrypt = "*"
 flask-wtf = "*"
 flask-login = "*"
+pypdf = "*"
+pypdfium2 = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.10"
