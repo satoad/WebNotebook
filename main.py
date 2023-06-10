@@ -3,6 +3,7 @@ from data import db_session
 from data.users import User
 from forms.signinform import SigninForm
 from forms.loginform import LoginForm
+from forms.changepassform import ChangepassForm
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
 
@@ -113,6 +114,27 @@ def profile():
 def logout():
     logout_user()
     return redirect("/")
+
+
+@app.route('/changepass', methods=['POST', 'GET'])
+@login_required
+def changepass():
+    form = ChangepassForm()
+    param = {}
+    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
+    param['style'] = url_for('static', filename='css/style.css')
+    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    param['form'] = form
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            param['message'] = 'Пароли не совпадают'
+            return render_template('changepass.html', **param)
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == current_user.email).first()
+        user.set_password(form.password.data)
+        db_sess.commit()
+        return redirect('/profile')
+    return render_template('changepass.html', **param)
 
 
 if __name__ == '__main__':
