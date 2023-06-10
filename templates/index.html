@@ -41,7 +41,7 @@
           {{ form.hidden_tag() }}
           <p>
             {{ form.file.label }}<br>
-            {{ form.file(accept="image/png, image/jpg") }}<br>
+            {{ form.file(accept="application/pdf") }}<br>
           </p>
           <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
         </form>
@@ -60,7 +60,7 @@
                 <div class="card-body">
                   <h5 class="card-title">Тетрадь 1</h5>
                   <div class="card__btn-group">
-                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <a href="notebook1" class="btn btn-outline-primary">Открыть</a>
                     <div class="dropdown">
                       <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ three_dots }}" alt="" width="20">
@@ -85,7 +85,7 @@
                 <div class="card-body">
                   <h5 class="card-title">Тетрадь 1</h5>
                   <div class="card__btn-group">
-                    <a href="notebook" class="btn btn-outline-primary">Открыть</a>
+                    <a href="notebook2" class="btn btn-outline-primary">Открыть</a>
                     <div class="dropdown">
                       <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="{{ three_dots }}" alt="" width="20">

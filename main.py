@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template, redirect, session
+from flask import Flask, request, url_for, render_template, redirect, session, jsonify
 from data import db_session
 from data.users import User
 from data.files import Files
@@ -42,26 +42,30 @@ def index():
     if current_user.is_authenticated:
         param['username'] = current_user.name
     if form.validate_on_submit():
-        #print('wtf', current_user.id)
+        # print('wtf', current_user.id)
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.id == current_user.id).first()
-
         f = form.file.data
         filename = secure_filename(f.filename)
-        filename = current_user.name + "_" + filename
-        f.save(os.path.join('files', filename))
-
-        file = Files(body="os.path.join('files', filename)")
-
+        dirname = current_user.name + "_" + filename
+        file = Files(body=str(os.path.join(f'static/sources/notebooks/{dirname}', filename)))
         user.files.append(file)
         db_sess.commit()
+        print(file.body, file.id, sep='\n')
+        if not os.path.exists(f'static/sources/notebooks/{dirname}'):
+            os.makedirs(f'static/sources/notebooks/{dirname}')
+        f.save(os.path.join(f'static/sources/notebooks/{dirname}', filename))
 
         return render_template('index.html', **param)
     return render_template('index.html', **param)
 
 
-@app.route('/notebook')
-def notebook():
+@app.route('/notebook<notebook_id>')
+def notebook(notebook_id):
+    global path
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.user_id == current_user.id)[int(notebook_id)]
+    path = file.body
     if not current_user.is_authenticated:
         return redirect('/login')
     param = {}
@@ -75,6 +79,15 @@ def notebook():
     param['username'] = current_user.name
     param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
     return render_template('notebook.html', **param)
+
+
+@app.route('/json')
+def json():
+    global path
+    data = {
+        'key1': path,
+    }
+    return jsonify(data)
 
 
 @app.route('/signin', methods=['POST', 'GET'])
