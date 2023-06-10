@@ -1,6 +1,7 @@
 from flask import Flask, request, url_for, render_template, redirect, session
 from data import db_session
 from data.users import User
+from data.files import Files
 from forms.signinform import SigninForm
 from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
@@ -41,10 +42,20 @@ def index():
     if current_user.is_authenticated:
         param['username'] = current_user.name
     if form.validate_on_submit():
-        print('wtf')
+        #print('wtf', current_user.id)
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+
         f = form.file.data
         filename = secure_filename(f.filename)
+        filename = current_user.name + "_" + filename
         f.save(os.path.join('files', filename))
+
+        file = Files(body="os.path.join('files', filename)")
+
+        user.files.append(file)
+        db_sess.commit()
+
         return render_template('index.html', **param)
     return render_template('index.html', **param)
 
@@ -150,5 +161,4 @@ def changepass():
 
 if __name__ == '__main__':
     db_session.global_init("db/users.db")
-    db_session.global_init("db/files.db")
     app.run(port=8080, host='127.0.0.1')

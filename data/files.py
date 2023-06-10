@@ -9,3 +9,4 @@ class Files(SqlAlchemyBase):
     body = sqlalchemy.Column(sqlalchemy.String(140))
     user_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey('users.id'))
     user = sqlalchemy.orm.relationship('User')
+
