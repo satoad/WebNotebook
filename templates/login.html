@@ -33,7 +33,7 @@
           <h3 class="body__title">Вход</h3>
           
           <div class="signin-wrapper border rounded">
-            <form action="#" class="signin" autocomplete="on">
+            <!-- <form action="#" class="signin" autocomplete="on">
 
               <div class="signin__input-wrapper">
                 <label for="uemail">Email</label>
@@ -48,6 +48,29 @@
               <div class="signin__input-wrapper">
                 <input type="submit" value="Вход" class="btn btn-primary">
               </div>
+            </form> -->
+            <form action="#" method="post" class="signin" autocomplete="on">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.email.label }}<br>
+                    {{ form.email(class="form-control", type="email", placeholder="Введите почту") }}<br>
+                    {% for error in form.email.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(class="form-control", type="password", placeholder="Введите пароль") }}<br>
+                    {% for error in form.password.errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                <div>{{ message }}</div>
             </form>
 
             <div class="to-signin border-top">

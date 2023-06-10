@@ -16,13 +16,16 @@
                 <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
                 WebNotebook
               </a>
-              <div class="authorized-user" id="authorized">
-                <span></span>
-                <img src="{{ circle }}" alt="profile-pic" width="30">
-              </div>
-              <div class="authorized-user" id="unauthorized">
-                <a href="login" class="btn btn-outline-primary">Войти</a>
-              </div>
+              {% if authorized %}
+                <div class="authorized-user">
+                  <span>{{ username }}</span>
+                  <img src="{{ circle }}" alt="profile-pic" width="30">
+                </div>
+              {% else %}
+                <div class="authorized-user">
+                  <a href="login" class="btn btn-outline-primary">Войти</a>
+                </div>
+              {% endif %}
             </div>
           </nav>
     </header>
@@ -179,6 +182,5 @@
     </main>
 
   <script src="{{ bootstrap_js }}"></script>
-  <script src="{{ user_js }}"></script>
 </body>
 </html>

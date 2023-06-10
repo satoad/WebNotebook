@@ -1,12 +1,21 @@
-from flask import Flask, request, url_for, render_template, redirect
+from flask import Flask, request, url_for, render_template, redirect, session
 from data import db_session
-from flask_bcrypt import Bcrypt
 from data.users import User
 from forms.signinform import SigninForm
+from forms.loginform import LoginForm
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
 
 app = Flask(__name__)
+login_manager = LoginManager()
+login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-bcrypt = Bcrypt(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    db_sess = db_session.create_session()
+    return db_sess.query(User).get(user_id)
 
 
 @app.route('/')
@@ -22,6 +31,9 @@ def index():
     param['plus'] = url_for('static', filename='sources/icons/plus.svg')
     param['doc'] = url_for('static', filename='sources/icons/doc.svg')
     param['three_dots'] = url_for('static', filename='sources/icons/three-dots-vertical.svg')
+    param['authorized'] = current_user.is_authenticated
+    if current_user.is_authenticated:
+        param['username'] = current_user.name
     return render_template('index.html', **param)
 
 
@@ -54,21 +66,21 @@ def signin():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
-    if request.method == 'GET':
-        param = {}
-        param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-        param['style'] = url_for('static', filename='css/style.css')
-        param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    form = LoginForm()
+    param = {}
+    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
+    param['style'] = url_for('static', filename='css/style.css')
+    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    param['form'] = form
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user)
+            return redirect("/")
+        param['message'] = 'Неверный логин или пароль'
         return render_template('login.html', **param)
-    elif request.method == 'POST':
-        print(request.form['email'])
-        print(request.form['password'])
-        print(request.form['class'])
-        print(request.form['file'])
-        print(request.form['about'])
-        print(request.form['accept'])
-        print(request.form['sex'])
-        return "Форма отправлена"
+    return render_template('login.html', **param)
 
 
 @app.route('/notebook')
@@ -90,6 +102,13 @@ def profile():
     param['style'] = url_for('static', filename='css/style.css')
     param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
     return render_template('profile.html', **param)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 if __name__ == '__main__':
