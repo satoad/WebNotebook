@@ -2,8 +2,10 @@ from flask import Flask, request, url_for, render_template, redirect
 from data import db_session
 from flask_bcrypt import Bcrypt
 from data.users import User
+from forms.signinform import SigninForm
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 bcrypt = Bcrypt(app)
 
 
@@ -25,23 +27,25 @@ def index():
 
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
+    form = SigninForm()
     param = {}
     param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
     param['style'] = url_for('static', filename='css/style.css')
     param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    if request.method == 'POST':
-        if request.form['upassword'] != request.form['upassword-confirm']:
-            # /todo Добавить поле для сообщений об ошибках
+    param['form'] = form
+    if form.validate_on_submit():
+        if form.password.data != form.password_again.data:
+            param['message'] = 'Пароли не совпадают'
             return render_template('signin.html', **param)
         db_sess = db_session.create_session()
-        if db_sess.query(User).filter(User.email == request.form['uemail']).first():
-            # /todo Добавить поле для сообщений об ошибках
-            return render_template('signin.html', **param)
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            param['message'] = "Такой пользователь уже есть"
+            return render_template('register.html', **param)
         user = User(
-            name=request.form['uname'],
-            email=request.form['uemail']
+            name=form.name.data,
+            email=form.email.data
         )
-        user.set_password(request.form['upassword'])
+        user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
         return redirect('/login')

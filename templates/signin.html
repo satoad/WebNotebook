@@ -32,7 +32,7 @@
           <h3 class="body__title">Регистрация</h3>
           
           <div class="signin-wrapper border rounded">
-            <form action="#" class="signin" autocomplete="on" method = "post">
+            <!-- <form action="#" class="signin" autocomplete="on" method = "post">
 
               <div class="signin__input-wrapper">
                 <label for="uname">Имя пользователя</label>
@@ -57,8 +57,49 @@
               <div class="signin__input-wrapper">
                 <input type="submit" value="Регистрация" class="btn btn-primary">
               </div>
+            </form> -->
+            
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <p>
+                    {{ form.name.label }}<br>
+                    {{ form.name(class="form-control") }}<br>
+                    {% for error in form.name.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.email.label }}<br>
+                    {{ form.email(class="form-control", type="email") }}<br>
+                    {% for error in form.email.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password.label }}<br>
+                    {{ form.password(class="form-control", type="password") }}<br>
+                    {% for error in form.password.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>
+                    {{ form.password_again.label }}<br>
+                    {{ form.password_again(class="form-control", type="password") }}<br>
+                    {% for error in form.password_again.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                {{message}}
             </form>
-
             <div class="to-login border-top">
               <span>Уже зарегистрированы?</span>
               <a href="login" class="btn btn-outline-primary">Войти</a>

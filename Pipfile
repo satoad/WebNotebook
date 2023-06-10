@@ -9,6 +9,7 @@ name = "pypi"
 sqlalchemy = "*"
 flask = "*"
 flask-bcrypt = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.10"
