@@ -44,8 +44,7 @@ def index():
         print('wtf')
         f = form.file.data
         filename = secure_filename(f.filename)
-        f.save(os.path.join('files', filename
-        ))
+        f.save(os.path.join('files', filename))
         return render_template('index.html', **param)
     return render_template('index.html', **param)
 
@@ -151,4 +150,5 @@ def changepass():
 
 if __name__ == '__main__':
     db_session.global_init("db/users.db")
+    db_session.global_init("db/files.db")
     app.run(port=8080, host='127.0.0.1')
