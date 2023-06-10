@@ -98,6 +98,8 @@ def login():
 
 @app.route('/notebook')
 def notebook():
+    if not current_user.is_authenticated:
+        return redirect('/login')
     param = {}
     param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
     param['style'] = url_for('static', filename='css/style.css')

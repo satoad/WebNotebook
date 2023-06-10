@@ -53,14 +53,17 @@
                         </div>
                     {% endfor %}
                 </p>
-                <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+                <div class="changepass">
+                  {{ form.submit(type="submit", class="btn btn-primary") }}
+                  <a href="profile" class="btn btn-outline-danger">Отмена</a>
+                </div>
                 <div>{{ message }}</div>
             </form>
 
-            <div class="to-signin border-top">
+            <!-- <div class="to-signin border-top">
               <span>Ещё не зарегистрированы?</span>
               <a href="signin" class="btn btn-outline-primary">Регистрация</a>
-            </div>
+            </div> -->
           </div>
         </div>
     </main>

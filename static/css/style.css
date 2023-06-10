@@ -127,6 +127,11 @@ li {
 
 /* ----- profile ------------- */
 
+.profile-btns {
+    display: flex;
+    justify-content: space-between;
+}
+
 .user-profile {
     margin: 150px auto 0 auto;
     padding: 40px 50px 25px 50px;
@@ -186,6 +191,13 @@ li {
 .to-login span,
 .to-signin span {
     margin-right: 20px;
+}
+
+/* ----- changepass ------------------ */
+
+.changepass {
+    display:flex;
+    justify-content: space-between;
 }
 
 /* ----- notebook --------------- */
