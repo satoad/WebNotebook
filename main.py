@@ -41,6 +41,7 @@ def index():
     param['form'] = form
     if current_user.is_authenticated:
         param['username'] = current_user.name
+        param['notebooks'] = len(current_user.files)
     if form.validate_on_submit():
         # print('wtf', current_user.id)
         db_sess = db_session.create_session()
