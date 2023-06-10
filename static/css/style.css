@@ -212,5 +212,58 @@ li {
 
 .notebook {
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 0 0 10px 0;
+}
+
+.top-bar {
+    display: flex;
+    align-items: center;
+}
+
+.top-bar__btn {
+    margin-left: 5px;
+    padding: 1px 6px;
+    border: 1px solid rgb(129, 129, 129);
+    border-radius: 5px;
+}
+.download-btn,
+.delete-btn {
+    margin-left: 20px;
+}
+
+
+
+.page-input {
+    max-width: 50px;
+}
+
+
+#page-num {
+    display: none;
+}
+
+.add-page {
+    margin-left: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.add-input {
+    margin-left: 5px;
+    display: flex;
+    flex-direction: column;
+}
+.add-input button {
+    max-width: 138px;
+    margin-top: 5px;
+    border: 1px solid rgb(129, 129, 129);
+    border-radius: 3px;
+}
+
+.page {
+    border: 1px solid rgb(129, 129, 129);
+    margin-top: 10px;
 }

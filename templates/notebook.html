@@ -16,12 +16,9 @@
                 <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
                 WebNotebook
               </a>
-              <div class="authorized-user" id="authorized">
-                <span></span>
+              <div class="authorized-user">
+                <span>{{ username }}</span>
                 <img src="{{ circle }}" alt="profile-pic" width="30">
-              </div>
-              <div class="authorized-user" id="unauthorized">
-                <a href="login" class="btn btn-outline-primary">Войти</a>
               </div>
             </div>
           </nav>
@@ -45,14 +42,38 @@
             </div>
           </div>
 
-        <div class="body bg-light-subtle row">
+        <div class="body bg-light-subtle">
           <h3 class="body__title">Тетрадь 1</h3>
           <div class="notebook">
-            <object data="{{ geometriya }}" type="application/pdf" width="1300" height="750"></object>
+            <div class="top-bar">
+              <span class="page-info">
+                Страница: <input class="page-input" type="number" id="page-input" min="1" value="1"> из <span id="page-count"></span>
+                <span id="page-num"></span>
+              </span>
+              <button class="top-bar__btn go-button" id="go-button">Перейти</button>
+              <button class="top-bar__btn" id="prev-page">
+                <img src="{{ arrow_left }}" alt="">
+              </button>
+              <button class="top-bar__btn" id="next-page">
+                <img src="{{ arrow_right }}" alt="">
+              </button>
+              <a href="#" class="top-bar__btn btn download-btn"><img src="{{ download }}" alt=""></a>
+              <a href="#" class="top-bar__btn btn btn-danger delete-btn">Удалить</a>
+              <div class="add-page">
+                <span>Добавить страницу:</span>
+                <form class="add-input">
+                  <input type="file" accept="image/png, image/jpeg">
+                  <button type="submit">submit</button>
+                </form>
+              </div>
+            </div>
+
+            <canvas class="page" id="pdf-render"></canvas>
           </div>
         </div>
     </main>
 
-  <script src="{{ user_js }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script src="{{ pdfviewer }}"></script>
 </body>
 </html>
