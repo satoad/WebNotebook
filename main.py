@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template, redirect, session, jsonify
+from flask import Flask, request, url_for, render_template, redirect, session, jsonify, send_file
 from data import db_session
 from data.users import User
 from data.files import Files
@@ -6,15 +6,16 @@ from forms.signinform import SigninForm
 from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
 from forms.fileuploadform import FileuploadForm
+from pdfedit import connect_pdf
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
-import os
-
+import io, os, shutil
 
 app = Flask(__name__)
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
 
 
 @login_manager.user_loader
@@ -60,8 +61,7 @@ def index():
         return render_template('index.html', **param)
     return render_template('index.html', **param)
 
-
-@app.route('/notebook<notebook_id>')
+@app.route('/notebook<notebook_id>', methods=['GET', 'POST'])
 def notebook(notebook_id):
     global path
     db_sess = db_session.create_session()
@@ -70,6 +70,9 @@ def notebook(notebook_id):
     if not current_user.is_authenticated:
         return redirect('/login')
     param = {}
+
+    form = FileuploadForm()
+
     param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
     param['style'] = url_for('static', filename='css/style.css')
     param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
@@ -79,6 +82,20 @@ def notebook(notebook_id):
     param['download'] = url_for('static', filename='sources/icons/download.svg')
     param['username'] = current_user.name
     param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
+    param['form'] = form
+
+    if request.method == 'POST':
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == current_user.id).first()
+        path = connect_pdf("/".join(user.files[int(notebook_id)].body.split("/")[:-1]) + "/")
+        cache = io.BytesIO()
+        with open(path, 'rb') as fp:
+            shutil.copyfileobj(fp, cache)
+            cache.flush()
+        cache.seek(0)
+        os.remove(path)
+        return send_file(cache, as_attachment=True, download_name="all_in_one.pdf")
+
     return render_template('notebook.html', **param)
 
 
