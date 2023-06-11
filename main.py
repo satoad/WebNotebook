@@ -39,6 +39,7 @@ def index():
     param['three_dots'] = url_for('static', filename='sources/icons/three-dots-vertical.svg')
     param['authorized'] = current_user.is_authenticated
     param['form'] = form
+    param['notebooks'] = 0
     if current_user.is_authenticated:
         param['username'] = current_user.name
         param['notebooks'] = len(current_user.files)
