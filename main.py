@@ -227,6 +227,16 @@ def changepass():
     return render_template('changepass.html', **param)
 
 
+@app.route('/download-lecture<int:notebook_id>-<int:lecture_id>')
+@login_required
+def download_lecture(notebook_id, lecture_id):
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
+    postfix = str(lecture_id) if lecture_id > 9 else '0' + str(lecture_id)
+    path = file.body[:-2] + postfix
+
+    return send_file(path, as_attachment=True)
+
 
 @app.route('/download-notebook<notebook_id>')
 @login_required

@@ -62,10 +62,8 @@
               <button class="top-bar__btn" id="next-page">
                 <img src="{{ arrow_right }}" alt="">
               </button>
-                 <form method="post" action="#">
-                    <button type="submit" class="top-bar__btn btn download-btn"><img src="{{ download }}" alt=""></button>
-                </form>
-              <div class="add-page">
+                <a href="/download-notebook{{ notebook_id }}" class="top-bar__btn btn download-btn"> <img src="{{ download }}" alt=""></a>
+                <div class="add-page">
                 <span>Добавить страницу:</span>
                 <form action="" class="add-input" method = "post" enctype="multipart/form-data">
                   {{ form.hidden_tag() }}
