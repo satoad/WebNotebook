@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ bootstrap }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <title>WebNotebook</title>
+</head>
+<body class="bg-info-subtle">
+    <header>
+        <nav class="navbar bg-info-subtle">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="index">
+                <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
+                WebNotebook
+              </a>
+              <div class="authorized-user">
+                <span>{{ username }}</span>
+                <img src="{{ circle }}" alt="profile-pic" width="30">
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main class="main">
+        <div class="sidebar">
+            <ul class="nav-sidebar">
+                <li class="nav-sidebar__link"><a href="profile">Мой профиль</a></li>
+                <li class="nav-sidebar__link"><a href="index">Мои тетради</a></li>
+            </ul>
+            <div class="sidebar__line"></div>
+            <div class="note-content">
+                <h5>Содержание</h5>
+                <ul class="content__list">
+                    <li class="content__item"><a href="#">Лекция 1</a></li>
+                    <li class="content__item"><a href="#">Лекция 1</a></li>
+                    <li class="content__item"><a href="#">Лекция 1</a></li>
+                    <li class="content__item"><a href="#">Лекция 1</a></li>
+                    <li class="content__item"><a href="#">Лекция 1</a></li>
+                </ul>
+            </div>
+          </div>
+
+        <div class="body bg-light-subtle">
+          <h3 class="body__title">Тетрадь 1</h3>
+          <div class="notebook">
+            <div class="top-bar">
+              <span class="page-info">
+                Страница: <input class="page-input" type="number" id="page-input" min="1" value="1"> из <span id="page-count"></span>
+                <span id="page-num"></span>
+              </span>
+              <button class="top-bar__btn go-button" id="go-button">Перейти</button>
+              <button class="top-bar__btn" id="prev-page">
+                <img src="{{ arrow_left }}" alt="">
+              </button>
+              <button class="top-bar__btn" id="next-page">
+                <img src="{{ arrow_right }}" alt="">
+              </button>
+              <a href="#" class="top-bar__btn btn download-btn"><img src="{{ download }}" alt=""></a>
+              <a href="#" class="top-bar__btn btn btn-danger delete-btn">Удалить</a>
+              <div class="add-page">
+                <span>Добавить страницу:</span>
+                <form class="add-input">
+                  <input type="file" accept="image/png, image/jpeg">
+                  <button type="submit">submit</button>
+                </form>
+              </div>
+            </div>
+
+            <canvas class="page" id="pdf-render"></canvas>
+          </div>
+        </div>
+    </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script src="{{ pdfviewer }}"></script>
+</body>
+</html>

@@ -33,23 +33,7 @@
           <h3 class="body__title">Вход</h3>
           
           <div class="signin-wrapper border rounded">
-            <!-- <form action="#" class="signin" autocomplete="on">
-
-              <div class="signin__input-wrapper">
-                <label for="uemail">Email</label>
-                <input type="email" name="uemail" required="required" class="signin__input" placeholder="Введите почту">
-              </div>
-
-              <div class="signin__input-wrapper">
-                <label for="upassword">Пароль</label>
-                <input type="password" name="upassword" required="required" class="signin__input" placeholder="Введите пароль">
-              </div>
-
-              <div class="signin__input-wrapper">
-                <input type="submit" value="Вход" class="btn btn-primary">
-              </div>
-            </form> -->
-            <form action="#" method="post" class="signin" autocomplete="on">
+            <form action="" method="post" class="signin" autocomplete="on">
                 {{ form.hidden_tag() }}
                 <p>
                     {{ form.email.label }}<br>

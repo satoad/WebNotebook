@@ -39,26 +39,24 @@ def index():
     param['three_dots'] = url_for('static', filename='sources/icons/three-dots-vertical.svg')
     param['authorized'] = current_user.is_authenticated
     param['form'] = form
-    param['notebooks'] = 0
+    param['notebooks'] = []
     if current_user.is_authenticated:
         param['username'] = current_user.name
-        param['notebooks'] = len(current_user.files)
+        param['notebooks'] = current_user.files
     if form.validate_on_submit():
-        # print('wtf', current_user.id)
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.id == current_user.id).first()
         f = form.file.data
         filename = secure_filename(f.filename)
-        dirname = current_user.name + "_" + filename
-        file = Files(body=str(os.path.join(f'static/sources/notebooks/{dirname}', filename)))
+        dirname = current_user.name + "_" + form.name.data
+        filename = form.name.data + '_01'
+        file = Files(body=str(os.path.join(f'static/sources/notebooks/{dirname}', filename)), name=form.name.data)
         user.files.append(file)
         db_sess.commit()
-        print(file.body, file.id, sep='\n')
         if not os.path.exists(f'static/sources/notebooks/{dirname}'):
             os.makedirs(f'static/sources/notebooks/{dirname}')
         f.save(os.path.join(f'static/sources/notebooks/{dirname}', filename))
-
-        return render_template('index.html', **param)
+        return redirect('/')
     return render_template('index.html', **param)
 
 
@@ -81,6 +79,27 @@ def notebook(notebook_id):
     param['username'] = current_user.name
     param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
     return render_template('notebook.html', **param)
+
+
+@app.route('/lecture<lecture_id>')
+def lecture(lecture_id):
+    global path
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.user_id == current_user.id)[int(lecture_id)]
+    path = file.body
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    param = {}
+    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
+    param['style'] = url_for('static', filename='css/style.css')
+    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
+    param['circle'] = url_for('static', filename='sources/icons/person-circle.svg')
+    param['arrow_left'] = url_for('static', filename='sources/icons/arrow-left.svg')
+    param['arrow_right'] = url_for('static', filename='sources/icons/arrow-right.svg')
+    param['download'] = url_for('static', filename='sources/icons/download.svg')
+    param['username'] = current_user.name
+    param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
+    return render_template('lecture.html', **param)
 
 
 @app.route('/json')
