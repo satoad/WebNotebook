@@ -218,15 +218,29 @@ def changepass():
     return render_template('changepass.html', **param)
 
 
-@app.route('/download-notebook<int:notebook_id>')
+
+@app.route('/download-notebook<notebook_id>')
 @login_required
-def doenload_notebook():
-    return redirect("/")
+def download_notebook(notebook_id):
+    print(notebook_id)
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
+    path = ''
+    for i in user.files:
+        if i.id == int(notebook_id):
+            path = i.body
+            break
+    return send_file(path, as_attachment=True)
 
 
-@app.route('/delete-notebook')
+@app.route('/delete-notebook<notebook_id>')
 @login_required
-def delete_notebook():
+def delete_notebook(notebook_id):
+    db_sess = db_session.create_session()
+    files = db_sess.query(Files).filter(Files.id == notebook_id, User.id == current_user.id).first()
+    if files:
+        db_sess.delete(files)
+        db_sess.commit()
     return redirect("/")
 
 
