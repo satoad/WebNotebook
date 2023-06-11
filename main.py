@@ -198,6 +198,18 @@ def changepass():
     return render_template('changepass.html', **param)
 
 
+@app.route('/download-notebook')
+@login_required
+def doenload_notebook():
+    return redirect("/")
+
+
+@app.route('/delete-notebook')
+@login_required
+def delete_notebook():
+    return redirect("/")
+
+
 if __name__ == '__main__':
     db_session.global_init("db/users.db")
     app.run(port=8080, host='127.0.0.1')
