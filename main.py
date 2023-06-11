@@ -70,8 +70,6 @@ def notebook(notebook_id):
         return redirect('/login')
     param = {}
 
-    form = FileuploadForm()
-
     param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
     param['style'] = url_for('static', filename='css/style.css')
     param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
@@ -81,19 +79,6 @@ def notebook(notebook_id):
     param['download'] = url_for('static', filename='sources/icons/download.svg')
     param['username'] = current_user.name
     param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
-    param['form'] = form
-
-    if request.method == 'POST':
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.id == current_user.id).first()
-        path = connect_pdf("/".join(user.files[int(notebook_id)].body.split("/")[:-1]) + "/")
-        cache = io.BytesIO()
-        with open(path, 'rb') as fp:
-            shutil.copyfileobj(fp, cache)
-            cache.flush()
-        cache.seek(0)
-        os.remove(path)
-        return send_file(cache, as_attachment=True, download_name="all_in_one.pdf")
 
     return render_template('notebook.html', **param)
 
@@ -215,15 +200,28 @@ def changepass():
     return render_template('changepass.html', **param)
 
 
-@app.route('/download-notebook')
+@app.route('/download-notebook<notebook_id>')
 @login_required
-def doenload_notebook():
-    return redirect("/")
+def download_notebook(notebook_id):
+    print(notebook_id)
+    db_sess = db_session.create_session()
+    user = db_sess.query(User).filter(User.id == current_user.id).first()
+    path = ''
+    for i in user.files:
+        if i.id == int(notebook_id):
+            path = i.body
+            break
+    return send_file(path, as_attachment=True)
 
 
-@app.route('/delete-notebook')
+@app.route('/delete-notebook<notebook_id>')
 @login_required
-def delete_notebook():
+def delete_notebook(notebook_id):
+    db_sess = db_session.create_session()
+    files = db_sess.query(Files).filter(Files.id == notebook_id, User.id == current_user.id).first()
+    if files:
+        db_sess.delete(files)
+        db_sess.commit()
     return redirect("/")
 
 

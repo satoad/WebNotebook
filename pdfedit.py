@@ -18,10 +18,32 @@ def convert(path):
     os.mkdir(new_path)
     for page_number in range(len(pdf)):
         page = pdf.get_page(page_number)
-        pil_image = page.render(scale = 300/72).to_pil()
+        pil_image = page.render(scale=300/72).to_pil()
         pil_image.save(new_path + '/page' + str(page_number + 1) + '.png')
 
     return new_path
+
+
+def connect_pdf(path_to_dir):
+    """
+    Combines all the pdf's into one.
+
+    :param path_to_dir: (str) path to directory with pdfs.
+    :return: path to new pdf.
+    """
+    path_to_file = path_to_dir + path_to_dir.split('/')[-2].split("_")[-1] + "_00.pdf"
+    os.remove(path_to_file)
+
+    pdfs = [f for f in os.listdir(path_to_dir) if os.path.isfile(os.path.join(path_to_dir, f))]
+    merger = PdfMerger()
+
+    for pdf in pdfs:
+        merger.append(path_to_dir + pdf)
+
+    merger.write(path_to_file)
+    merger.close()
+
+    return path_to_file
 
 
 def add_page(path_to_pdf, path_to_pic, num):
@@ -57,23 +79,4 @@ def add_page(path_to_pdf, path_to_pic, num):
     merger.write(path_to_pdf)
     merger.close()
 
-
-def connect_pdf(path_to_dir):
-    """
-    Combines all the pdf's into one.
-
-    :param path_to_dir: (str) path to directory with pdfs.
-    :return: path to new pdf.
-    """
-    pdfs = [f for f in os.listdir(path_to_dir) if os.path.isfile(os.path.join(path_to_dir, f))]
-
-    merger = PdfMerger()
-
-    for pdf in pdfs:
-        merger.append(path_to_dir + pdf)
-
-    merger.write(path_to_dir + '/all_in_one.pdf')
-    merger.close()
-
-    return path_to_dir + '/all_in_one.pdf'
-
+    connect_pdf("/".join(path_to_pdf.split('/')[:-1]))
