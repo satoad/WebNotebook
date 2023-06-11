@@ -34,14 +34,14 @@
                 <h5>Содержание</h5>
                 <ul class="content__list">
                     {% for i in range(1, lect_num) %}
-                    <li class="content__item"><a href="/lecture{{ i }}">Лекция {{ i }}</a></li>
+                    <li class="content__item"><a href="/lecture{{ notebook_id }}-{{ i }}">Лекция {{ i }}</a></li>
                     {% endfor %}
                 </ul>
             </div>
           </div>
 
         <div class="body bg-light-subtle">
-          <h3 class="body__title">Тетрадь 1</h3>
+          <h3 class="body__title">{{ notebook_name }}</h3>
           <div class="notebook">
             <div class="top-bar">
               <span class="page-info">
@@ -61,11 +61,9 @@
                 </form>
               <div class="add-page">
                 <span>Добавить страницу:</span>
-                <form action="" class="upload" method = "post" enctype="multipart/form-data">
+                <form action="" class="add-input" method = "post" enctype="multipart/form-data">
                   {{ form.hidden_tag() }}
-                  <p>
-                    {{ form.file(accept="application/pdf") }}<br>
-                  </p>
+                  {{ form.file(accept="application/pdf") }}
                   <p>{{ form.submit(type="submit") }}</p>
                 </form>
               </div>

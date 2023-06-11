@@ -82,6 +82,8 @@ def notebook(notebook_id):
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'form': form,
         'lect_num': file.lect_num + 1,
+        'notebook_id': file.id,
+        'notebook_name': file.name,
     }
     if form.validate_on_submit():
         f = form.file.data
@@ -94,14 +96,15 @@ def notebook(notebook_id):
     return render_template('notebook.html', **param)
 
 
-@app.route('/lecture<lecture_id>')
-def lecture(lecture_id):
+@app.route('/lecture<int:notebook_id>-<int:lecture_id>')
+def lecture(notebook_id, lecture_id):
     global path
-    db_sess = db_session.create_session()
-    file = db_sess.query(Files).filter(Files.user_id == current_user.id)[int(lecture_id)]
-    path = file.body
     if not current_user.is_authenticated:
         return redirect('/login')
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
+    postfix = str(lecture_id) if lecture_id > 9 else '0' + str(lecture_id)
+    path = file.body[:-2] + postfix
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
@@ -113,6 +116,8 @@ def lecture(lecture_id):
         'username': current_user.name,
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'lect_num': file.lect_num + 1,
+        'notebook_id': file.id,
+        'lecture_id': lecture_id,
     }
     return render_template('lecture.html', **param)
 
