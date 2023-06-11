@@ -10,7 +10,7 @@ from forms.lectureuploadform import LectureuploadForm
 from pdfedit import connect_pdf
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
-import io, os, shutil
+import os, shutil
 
 app = Flask(__name__)
 login_manager = LoginManager()
@@ -51,23 +51,25 @@ def index():
         f = form.file.data
         filename = secure_filename(f.filename)
         dirname = current_user.name + "_" + form.name.data
-        filename = form.name.data + '_01'
+        filename = form.name.data + '_00'
         file = Files(body=str(os.path.join(f'static/sources/notebooks/{dirname}', filename)), name=form.name.data)
         user.files.append(file)
         db_sess.commit()
         if not os.path.exists(f'static/sources/notebooks/{dirname}'):
             os.makedirs(f'static/sources/notebooks/{dirname}')
-        f.save(os.path.join(f'static/sources/notebooks/{dirname}', filename))
+        path = os.path.join(f'static/sources/notebooks/{dirname}', filename)
+        f.save(path)
+        shutil.copy(path, path[:-1] + '1')
         return redirect('/')
     return render_template('index.html', **param)
 
-@app.route('/notebook<notebook_id>', methods=['GET', 'POST'])
+@app.route('/notebook<int:notebook_id>', methods=['GET', 'POST'])
 def notebook(notebook_id):
     if not current_user.is_authenticated:
         return redirect('/login')
     global path
     db_sess = db_session.create_session()
-    file = db_sess.query(Files).filter(Files.user_id == current_user.id)[int(notebook_id)]
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
     path = file.body
     form = LectureuploadForm()
     param = {
@@ -78,6 +80,7 @@ def notebook(notebook_id):
         'arrow_left': url_for('static', filename='sources/icons/arrow-left.svg'),
         'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
         'download': url_for('static', filename='sources/icons/download.svg'),
+        'trash': url_for('static', filename='sources/icons/trash.svg'),
         'username': current_user.name,
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'form': form,
@@ -113,6 +116,7 @@ def lecture(notebook_id, lecture_id):
         'arrow_left': url_for('static', filename='sources/icons/arrow-left.svg'),
         'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
         'download': url_for('static', filename='sources/icons/download.svg'),
+        'trash': url_for('static', filename='sources/icons/trash.svg'),
         'username': current_user.name,
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'lect_num': file.lect_num + 1,
@@ -134,11 +138,12 @@ def json():
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
     form = SigninForm()
-    param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['form'] = form
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'form': form,
+    }
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             param['message'] = 'Пароли не совпадают'
@@ -161,11 +166,12 @@ def signin():
 @app.route('/login', methods=['POST', 'GET'])
 def login():
     form = LoginForm()
-    param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['form'] = form
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'form': form,
+    }
     if form.validate_on_submit():
         db_sess = db_session.create_session()
         user = db_sess.query(User).filter(User.email == form.email.data).first()
@@ -181,12 +187,13 @@ def login():
 def profile():
     if not current_user.is_authenticated:
         return redirect('/login')
-    param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['username'] = current_user.name
-    param['email'] = current_user.email
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'username': current_user.name,
+        'email': current_user.email,
+    }
     return render_template('profile.html', **param)
 
 
@@ -202,10 +209,12 @@ def logout():
 def changepass():
     form = ChangepassForm()
     param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['form'] = form
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'form': form,
+    }
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             param['message'] = 'Пароли не совпадают'
@@ -241,7 +250,17 @@ def delete_notebook(notebook_id):
     if files:
         db_sess.delete(files)
         db_sess.commit()
-    return redirect("/")
+    return redirect('/')
+
+
+@app.route("/page_num", methods=["POST", "GET"])
+@login_required
+def page_num():
+    global page_number
+    data = request.get_json()
+    page_number = int(data['key1'])
+    return jsonify({'message': 'success'})
+
 
 
 if __name__ == '__main__':

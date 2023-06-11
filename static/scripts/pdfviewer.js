@@ -94,4 +94,29 @@ fetch('/json')
   // Button Events
   document.querySelector('#prev-page').addEventListener('click', showPrevPage);
   document.querySelector('#next-page').addEventListener('click', showNextPage);
+
+  function sendData() {
+     // Usage
+    let data1 = {
+      key1: pageNum
+    };
+    fetch('/page_num', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data1)
+    })
+    .then(response =>  response.json())
+    .then(data => {
+        console.log(data1);
+    });
+  }
+    
+ 
+  const delButton = document.querySelector('#post-btn-del')
+  const subButton = document.querySelector('#post-btn-sub')
+
+  delButton.addEventListener('click', sendData)
+  subButton.addEventListener('click', sendData)
 });

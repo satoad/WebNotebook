@@ -17,10 +17,12 @@
                 WebNotebook
               </a>
               {% if authorized %}
-                <div class="authorized-user">
-                  <span>{{ username }}</span>
-                  <img src="{{ circle }}" alt="profile-pic" width="30">
-                </div>
+                <a href="profile">
+                  <div class="authorized-user">
+                    <span>{{ username }}</span>
+                    <img src="{{ circle }}" alt="profile-pic" width="30">
+                  </div>
+                </a>
               {% else %}
                 <div class="authorized-user">
                   <a href="login" class="btn btn-outline-primary">Войти</a>
@@ -69,7 +71,7 @@
                   <div class="card-body">
                     <h5 class="card-title">{{ notebook.name }}</h5>
                     <div class="card__btn-group">
-                      <a href="notebook{{ loop.index0 }}" class="btn btn-outline-primary">Открыть</a>
+                      <a href="notebook{{ notebook.id }}" class="btn btn-outline-primary">Открыть</a>
                       <div class="dropdown">
                         <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                           <img src="{{ three_dots }}" alt="" width="20">
