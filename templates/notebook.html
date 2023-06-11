@@ -33,11 +33,9 @@
             <div class="note-content">
                 <h5>Содержание</h5>
                 <ul class="content__list">
-                    <li class="content__item"><a href="#">Лекция 1</a></li>
-                    <li class="content__item"><a href="#">Лекция 1</a></li>
-                    <li class="content__item"><a href="#">Лекция 1</a></li>
-                    <li class="content__item"><a href="#">Лекция 1</a></li>
-                    <li class="content__item"><a href="#">Лекция 1</a></li>
+                    {% for i in range(1, lect_num) %}
+                    <li class="content__item"><a href="/lecture{{ i }}">Лекция {{ i }}</a></li>
+                    {% endfor %}
                 </ul>
             </div>
           </div>
@@ -61,12 +59,14 @@
                     <button type="submit" class="top-bar__btn btn download-btn"><img src="{{ download }}" alt=""></button>
 
                 </form>
-              <a href="#" class="top-bar__btn btn btn-danger delete-btn">Удалить</a>
               <div class="add-page">
                 <span>Добавить страницу:</span>
-                <form class="add-input">
-                  <input type="file" accept="image/png, image/jpeg">
-                  <button type="submit">submit</button>
+                <form action="" class="upload" method = "post" enctype="multipart/form-data">
+                  {{ form.hidden_tag() }}
+                  <p>
+                    {{ form.file(accept="application/pdf") }}<br>
+                  </p>
+                  <p>{{ form.submit(type="submit") }}</p>
                 </form>
               </div>
             </div>

@@ -6,6 +6,7 @@ from forms.signinform import SigninForm
 from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
 from forms.fileuploadform import FileuploadForm
+from forms.lectureuploadform import LectureuploadForm
 from pdfedit import connect_pdf
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
@@ -28,19 +29,19 @@ def load_user(user_id):
 @app.route('/index', methods=['GET', 'POST'])
 def index():
     form = FileuploadForm()
-    param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['circle'] = url_for('static', filename='sources/icons/person-circle.svg')
-    param['user_js'] = url_for('static', filename='scripts/user.js')
-    param['bootstrap_js'] = url_for('static', filename='scripts/bootstrap.bundle.min.js')
-    param['plus'] = url_for('static', filename='sources/icons/plus.svg')
-    param['doc'] = url_for('static', filename='sources/icons/doc.svg')
-    param['three_dots'] = url_for('static', filename='sources/icons/three-dots-vertical.svg')
-    param['authorized'] = current_user.is_authenticated
-    param['form'] = form
-    param['notebooks'] = []
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'bootstrap_js': url_for('static', filename='scripts/bootstrap.bundle.min.js'),
+        'plus': url_for('static', filename='sources/icons/plus.svg'),
+        'doc': url_for('static', filename='sources/icons/doc.svg'),
+        'three_dots': url_for('static', filename='sources/icons/three-dots-vertical.svg'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'authorized': current_user.is_authenticated,
+        'form': form,
+        'notebooks': [],
+    }
     if current_user.is_authenticated:
         param['username'] = current_user.name
         param['notebooks'] = current_user.files
@@ -62,39 +63,34 @@ def index():
 
 @app.route('/notebook<notebook_id>', methods=['GET', 'POST'])
 def notebook(notebook_id):
+    if not current_user.is_authenticated:
+        return redirect('/login')
     global path
     db_sess = db_session.create_session()
     file = db_sess.query(Files).filter(Files.user_id == current_user.id)[int(notebook_id)]
     path = file.body
-    if not current_user.is_authenticated:
-        return redirect('/login')
-    param = {}
-
-    form = FileuploadForm()
-
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['circle'] = url_for('static', filename='sources/icons/person-circle.svg')
-    param['arrow_left'] = url_for('static', filename='sources/icons/arrow-left.svg')
-    param['arrow_right'] = url_for('static', filename='sources/icons/arrow-right.svg')
-    param['download'] = url_for('static', filename='sources/icons/download.svg')
-    param['username'] = current_user.name
-    param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
-    param['form'] = form
-
-    if request.method == 'POST':
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.id == current_user.id).first()
-        path = connect_pdf("/".join(user.files[int(notebook_id)].body.split("/")[:-1]) + "/")
-        cache = io.BytesIO()
-        with open(path, 'rb') as fp:
-            shutil.copyfileobj(fp, cache)
-            cache.flush()
-        cache.seek(0)
-        os.remove(path)
-        return send_file(cache, as_attachment=True, download_name="all_in_one.pdf")
-
+    form = LectureuploadForm()
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'arrow_left': url_for('static', filename='sources/icons/arrow-left.svg'),
+        'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
+        'download': url_for('static', filename='sources/icons/download.svg'),
+        'username': current_user.name,
+        'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
+        'form': form,
+        'lect_num': file.lect_num + 1,
+    }
+    if form.validate_on_submit():
+        f = form.file.data
+        postfix = str(file.lect_num + 1) if file.lect_num > 9 else '0' + str(file.lect_num + 1)
+        filename = path[:-2] + postfix
+        file.lect_num = file.lect_num + 1
+        db_sess.commit()
+        f.save(filename)
+        return redirect(f'/notebook{notebook_id}')
     return render_template('notebook.html', **param)
 
 
@@ -106,16 +102,18 @@ def lecture(lecture_id):
     path = file.body
     if not current_user.is_authenticated:
         return redirect('/login')
-    param = {}
-    param['bootstrap'] = url_for('static', filename='css/bootstrap.min.css')
-    param['style'] = url_for('static', filename='css/style.css')
-    param['clouds'] = url_for('static', filename='sources/icons/clouds.svg')
-    param['circle'] = url_for('static', filename='sources/icons/person-circle.svg')
-    param['arrow_left'] = url_for('static', filename='sources/icons/arrow-left.svg')
-    param['arrow_right'] = url_for('static', filename='sources/icons/arrow-right.svg')
-    param['download'] = url_for('static', filename='sources/icons/download.svg')
-    param['username'] = current_user.name
-    param['pdfviewer'] = url_for('static', filename='scripts/pdfviewer.js')
+    param = {
+        'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
+        'style': url_for('static', filename='css/style.css'),
+        'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'arrow_left': url_for('static', filename='sources/icons/arrow-left.svg'),
+        'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
+        'download': url_for('static', filename='sources/icons/download.svg'),
+        'username': current_user.name,
+        'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
+        'lect_num': file.lect_num + 1,
+    }
     return render_template('lecture.html', **param)
 
 
@@ -215,7 +213,7 @@ def changepass():
     return render_template('changepass.html', **param)
 
 
-@app.route('/download-notebook')
+@app.route('/download-notebook<int:notebook_id>')
 @login_required
 def doenload_notebook():
     return redirect("/")
