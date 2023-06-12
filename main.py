@@ -62,9 +62,9 @@ def index():
         'three_dots': url_for('static', filename='sources/icons/three-dots-vertical.svg'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
         'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'authorized': current_user.is_authenticated,
         'form': form,
-        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'notebooks': [],
         'login': _('Login'),
         'my_profile': _('My Profile'),
@@ -247,7 +247,19 @@ def changepass():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'form': form,
+        'username': current_user.name,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'password_change': _('Password change'),
+        'enter_password': _('Enter password'),
+        'confirm_password': _('Confirm password'),
+        'new_password': _('New password'),
+        'confirm_new_password': _('Confirm new password'),
+        'cancel': _('Cancel'),
+        'change': _('Change'),
     }
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -397,8 +409,8 @@ def logout():
     return redirect("/")
 
 
-@app.route('/translate')
-def ch_translate():
+@app.route('/translate-<path>')
+def ch_translate(path):
     """Действие, меняет локаль"""
     global _
     global ru
@@ -407,7 +419,7 @@ def ch_translate():
         _ = en
     else:
         _ = ru
-    return redirect("/")
+    return redirect(f'/{path}')
 
 
 if __name__ == '__main__':
