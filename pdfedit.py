@@ -34,7 +34,7 @@ def connect_pdf(path_to_dir):
     path_to_file = os.path.join(path_to_dir, os.path.basename(path_to_dir).split('_')[-1] + "_00.pdf")
     os.remove(path_to_file)
 
-    pdfs = [f for f in os.listdir(path_to_dir) if os.path.isfile(os.path.join(path_to_dir, f))]
+    pdfs = sorted([f for f in os.listdir(path_to_dir) if os.path.isfile(os.path.join(path_to_dir, f))])
     merger = PdfMerger()
 
     for pdf in pdfs:

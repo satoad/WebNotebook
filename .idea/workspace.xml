@@ -8,6 +8,7 @@
       <change afterPath="$PROJECT_DIR$/.idea/WebNotebook.iml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/users.db" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -99,6 +100,7 @@
       <workItem from="1686410813184" duration="3079000" />
       <workItem from="1686418836587" duration="17807000" />
       <workItem from="1686525504950" duration="2184000" />
+      <workItem from="1686531909278" duration="359000" />
     </task>
     <servers />
   </component>
