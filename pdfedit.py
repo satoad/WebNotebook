@@ -31,14 +31,14 @@ def connect_pdf(path_to_dir):
     :param path_to_dir: (str) path to directory with pdfs.
     :return: path to new pdf.
     """
-    path_to_file = path_to_dir + path_to_dir.split('/')[-2].split("_")[-1] + "_00.pdf"
+    path_to_file = os.path.join(path_to_dir, os.path.basename(path_to_dir).split('_')[-1] + "_00.pdf")
     os.remove(path_to_file)
 
     pdfs = [f for f in os.listdir(path_to_dir) if os.path.isfile(os.path.join(path_to_dir, f))]
     merger = PdfMerger()
 
     for pdf in pdfs:
-        merger.append(path_to_dir + pdf)
+        merger.append(os.path.join(path_to_dir, pdf))
 
     merger.write(path_to_file)
     merger.close()

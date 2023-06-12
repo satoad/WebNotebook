@@ -66,9 +66,10 @@
               <a href="#" class="top-bar__btn btn btn-danger delete-btn" id="post-btn-del">Удалить</a>
               <div class="add-page">
                 <span>Добавить страницу:</span>
-                <form class="add-input">
-                  <input type="file" accept="image/png, image/jpeg">
-                  <button type="submit" id="post-btn-sub">submit</button>
+                <form action="" class="add-input" method = "post" enctype="multipart/form-data">
+                  {{ form.hidden_tag() }}
+                  {{ form.file(accept="image/png, image/jpeg") }}
+                  <p>{{ form.submit(type="submit", id="post-btn-sub") }}</p>
                 </form>
               </div>
             </div>

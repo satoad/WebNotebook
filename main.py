@@ -7,7 +7,7 @@ from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
 from forms.fileuploadform import FileuploadForm
 from forms.lectureuploadform import LectureuploadForm
-from pdfedit import connect_pdf
+from pdfedit import connect_pdf, add_page
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 import os, shutil
@@ -51,7 +51,7 @@ def index():
         f = form.file.data
         filename = secure_filename(f.filename)
         dirname = current_user.name + "_" + form.name.data
-        filename = form.name.data + '_00'
+        filename = form.name.data + '_00.pdf'
         file = Files(body=str(os.path.join(f'static/sources/notebooks/{dirname}', filename)), name=form.name.data)
         user.files.append(file)
         db_sess.commit()
@@ -59,7 +59,7 @@ def index():
             os.makedirs(f'static/sources/notebooks/{dirname}')
         path = os.path.join(f'static/sources/notebooks/{dirname}', filename)
         f.save(path)
-        shutil.copy(path, path[:-1] + '1')
+        shutil.copy(path, path[:-5] + '1.pdf')
         return redirect('/')
     return render_template('index.html', **param)
 
@@ -90,24 +90,27 @@ def notebook(notebook_id):
     }
     if form.validate_on_submit():
         f = form.file.data
-        postfix = str(file.lect_num + 1) if file.lect_num > 9 else '0' + str(file.lect_num + 1)
-        filename = path[:-2] + postfix
+        postfix = str(file.lect_num + 1) + '.pdf' if file.lect_num > 9 else '0' + str(file.lect_num + 1) + '.pdf'
+        filename = path[:-6] + postfix
         file.lect_num = file.lect_num + 1
         db_sess.commit()
         f.save(filename)
+        connect_pdf(os.path.dirname(path))
         return redirect(f'/notebook{notebook_id}')
     return render_template('notebook.html', **param)
 
 
-@app.route('/lecture<int:notebook_id>-<int:lecture_id>')
+@app.route('/lecture<int:notebook_id>-<int:lecture_id>', methods=['POST', 'GET'])
 def lecture(notebook_id, lecture_id):
     global path
+    global page_number
     if not current_user.is_authenticated:
         return redirect('/login')
     db_sess = db_session.create_session()
     file = db_sess.query(Files).filter(Files.id == notebook_id).first()
-    postfix = str(lecture_id) if lecture_id > 9 else '0' + str(lecture_id)
-    path = file.body[:-2] + postfix
+    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
+    path = file.body[:-6] + postfix
+    form = LectureuploadForm()
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
@@ -122,7 +125,15 @@ def lecture(notebook_id, lecture_id):
         'lect_num': file.lect_num + 1,
         'notebook_id': file.id,
         'lecture_id': lecture_id,
+        'form': form,
     }
+    if form.validate_on_submit():
+        f = form.file.data
+        filename = secure_filename(f.filename)
+        filename = os.path.join(os.path.dirname(path), filename)
+        f.save(filename)
+        add_page(path, filename, page_number)
+        return render_template('lecture.html', **param)
     return render_template('lecture.html', **param)
 
 
@@ -232,8 +243,8 @@ def changepass():
 def download_lecture(notebook_id, lecture_id):
     db_sess = db_session.create_session()
     file = db_sess.query(Files).filter(Files.id == notebook_id).first()
-    postfix = str(lecture_id) if lecture_id > 9 else '0' + str(lecture_id)
-    path = file.body[:-2] + postfix
+    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
+    path = file.body[:-6] + postfix
 
     return send_file(path, as_attachment=True)
 
