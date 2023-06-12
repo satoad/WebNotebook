@@ -7,7 +7,7 @@ from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
 from forms.fileuploadform import FileuploadForm
 from forms.lectureuploadform import LectureuploadForm
-from pdfedit import connect_pdf, add_page
+from pdfedit import connect_pdf, add_page, page_delete
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
 import os, shutil
@@ -248,6 +248,19 @@ def download_lecture(notebook_id, lecture_id):
 
     return send_file(path, as_attachment=True)
 
+@app.route('/delete-page<int:notebook_id>-<int:lecture_id>', methods=['POST', 'GET'])
+@login_required
+def delete_page(notebook_id, lecture_id):
+    global page_number
+    print(notebook_id, lecture_id)
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
+    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
+    path = file.body[:-6] + postfix
+    print(path)
+    page_delete(path, page_number)
+
+    return redirect(f"/lecture{notebook_id}-{lecture_id}")
 
 @app.route('/download-notebook<notebook_id>')
 @login_required
@@ -282,6 +295,7 @@ def page_num():
     global page_number
     data = request.get_json()
     page_number = int(data['key1'])
+    print(page_number)
     return jsonify({'message': 'success'})
 
 

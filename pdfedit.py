@@ -80,3 +80,21 @@ def add_page(path_to_pdf, path_to_pic, num):
     merger.close()
 
     connect_pdf("/".join(path_to_pdf.split('/')[:-1]))
+
+
+def page_delete(path_to_pdf, num):
+    file = open(path_to_pdf, 'rb')
+    readpdf = PyPDF2.PdfReader(file)
+    totalpages = len(readpdf.pages)
+    file.close()
+
+    merger = PdfMerger()
+    merger.append(path_to_pdf, pages=(0, num - 1))
+    merger.append(path_to_pdf, pages=(num, totalpages))
+
+    os.remove(path_to_pdf)
+
+    merger.write(path_to_pdf)
+    merger.close()
+
+    connect_pdf("/".join(path_to_pdf.split('/')[:-1]))
