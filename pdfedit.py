@@ -1,3 +1,5 @@
+"""Модуль с функциями для работы с пдф"""
+
 from pypdf import PdfMerger
 import PyPDF2
 from PIL import Image
@@ -7,10 +9,10 @@ import pypdfium2 as pdfium
 
 def convert(path):
     """
-    Convert original pdf to png.
+    Перводит pdf файл в png.
 
-    :param path: (str) path to original pdf.
-    :return: (str) path to directory with png.
+    :param path: (str) путь до исходника pdf.
+    :return: (str) путь до полученного png.
     """
     pdf = pdfium.PdfDocument(path)
     path_parts = path.split('/')
@@ -26,10 +28,10 @@ def convert(path):
 
 def connect_pdf(path_to_dir):
     """
-    Combines all the pdf's into one.
+    Склеивает все pdf файлы, имеющиеся в директории в один.
 
-    :param path_to_dir: (str) path to directory with pdfs.
-    :return: path to new pdf.
+    :param path_to_dir: (str) путь до директории с pdf файлами.
+    :return: путь до полученного pdf.
     """
     path_to_file = os.path.join(path_to_dir, os.path.basename(path_to_dir).split('_')[-1] + "_00.pdf")
     os.remove(path_to_file)
@@ -48,13 +50,12 @@ def connect_pdf(path_to_dir):
 
 def add_page(path_to_pdf, path_to_pic, num):
     """
-    Insert page in original pdf.
+    Вставляет страницу в pdf файл.
 
-    :param path_to_pdf: (str) path to original pdf.
-    :param path_to_pic: (str) path to the png to be inserted.
-    :param num: (int) the number under which you want to insert the png.
+    :param path_to_pdf: (str) путь до исходника pdf.
+    :param path_to_pic: (str) путь до png файла, содержащего вставляемую страницу.
+    :param num: (int) номер страницы, на который необходимо вставить png файл.
     """
-
     image_1 = Image.open(path_to_pic)
     im_1 = image_1.convert('RGB')
     pdf_path_parts = path_to_pdf.split('/')
@@ -83,6 +84,12 @@ def add_page(path_to_pdf, path_to_pic, num):
 
 
 def page_delete(path_to_pdf, num):
+    """
+    Удаляет страницу из pdf файла.
+
+    :param path_to_pdf: (str) путь до исходника pdf.
+    :param num: (int) номер страницы, которую нужно удалить.
+    """
     file = open(path_to_pdf, 'rb')
     readpdf = PyPDF2.PdfReader(file)
     totalpages = len(readpdf.pages)

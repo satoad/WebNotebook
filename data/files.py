@@ -1,10 +1,13 @@
+"""Описание класса тетради"""
+
 import sqlalchemy
 from .db_session import SqlAlchemyBase
 
 
 class Files(SqlAlchemyBase):
-    __tablename__ = 'files'
+    """Класс тетради для хранения в бд"""
 
+    __tablename__ = 'files'
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True)
     body = sqlalchemy.Column(sqlalchemy.String(140))
     name = sqlalchemy.Column(sqlalchemy.String(30), default='Тетрадь')

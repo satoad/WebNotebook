@@ -1,3 +1,5 @@
+"""Основной модуль, запускающий приложение"""
+
 from flask import Flask
 from flask import request
 from flask import url_for
@@ -33,6 +35,7 @@ app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 
 @login_manager.user_loader
 def load_user(user_id):
+    """Загружает пользователя с user_id из базы данных"""
     db_sess = db_session.create_session()
     return db_sess.query(User).get(user_id)
 
@@ -40,6 +43,7 @@ def load_user(user_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
+    """Реализует работу главной страницы сайта"""
     form = FileuploadForm()
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
@@ -78,6 +82,7 @@ def index():
 
 @app.route('/notebook<int:notebook_id>', methods=['GET', 'POST'])
 def notebook(notebook_id):
+    """Страница сайта, отображающая конкретную тетрадь"""
     if not current_user.is_authenticated:
         return redirect('/login')
     global path
@@ -115,6 +120,7 @@ def notebook(notebook_id):
 
 @app.route('/lecture<int:notebook_id>-<int:lecture_id>', methods=['POST', 'GET'])
 def lecture(notebook_id, lecture_id):
+    """Страница сайта, отображающая отдельную лекцию из тетради"""
     global path
     global page_number
     if not current_user.is_authenticated:
@@ -150,17 +156,9 @@ def lecture(notebook_id, lecture_id):
     return render_template('lecture.html', **param)
 
 
-@app.route('/json')
-def json():
-    global path
-    data = {
-        'key1': path,
-    }
-    return jsonify(data)
-
-
 @app.route('/signin', methods=['POST', 'GET'])
 def signin():
+    """Страница регистрации пользователей"""
     form = SigninForm()
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
@@ -189,6 +187,7 @@ def signin():
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
+    """Страница входа"""
     form = LoginForm()
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
@@ -209,6 +208,7 @@ def login():
 
 @app.route('/profile')
 def profile():
+    """Страница профиля"""
     if not current_user.is_authenticated:
         return redirect('/login')
     param = {
@@ -221,16 +221,10 @@ def profile():
     return render_template('profile.html', **param)
 
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect("/")
-
-
 @app.route('/changepass', methods=['POST', 'GET'])
 @login_required
 def changepass():
+    """Страница смены пароля"""
     form = ChangepassForm()
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
@@ -250,33 +244,13 @@ def changepass():
     return render_template('changepass.html', **param)
 
 
-@app.route('/download-lecture<int:notebook_id>-<int:lecture_id>')
-@login_required
-def download_lecture(notebook_id, lecture_id):
-    db_sess = db_session.create_session()
-    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
-    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
-    path = file.body[:-6] + postfix
-
-    return send_file(path, as_attachment=True)
-
-
-@app.route('/delete-page<int:notebook_id>-<int:lecture_id>', methods=['POST', 'GET'])
-@login_required
-def delete_page(notebook_id, lecture_id):
-    global page_number
-    db_sess = db_session.create_session()
-    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
-    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
-    path = file.body[:-6] + postfix
-    page_delete(path, page_number)
-
-    return redirect(f"/lecture{notebook_id}-{lecture_id}")
-
-
 @app.route('/download-notebook<notebook_id>')
 @login_required
 def download_notebook(notebook_id):
+    """
+    Действие, загружающее выбранную тетрадь.
+    Вызывается на главной странице нажатием на '...' -> 'Скачать' возле желаемой тетради.
+    """
     print(notebook_id)
     db_sess = db_session.create_session()
     user = db_sess.query(User).filter(User.id == current_user.id).first()
@@ -291,6 +265,10 @@ def download_notebook(notebook_id):
 @app.route('/delete-notebook<notebook_id>')
 @login_required
 def delete_notebook(notebook_id):
+    """
+    Действие, удаляющее выбранную тетрадь.
+    Вызывается на главной странице нажатием на '...' -> 'Удалить' возле желаемой тетради.
+    """
     db_sess = db_session.create_session()
     files = db_sess.query(Files).filter(Files.id == notebook_id, User.id == current_user.id).first()
 
@@ -301,9 +279,30 @@ def delete_notebook(notebook_id):
     return redirect('/')
 
 
+@app.route('/download-lecture<int:notebook_id>-<int:lecture_id>')
+@login_required
+def download_lecture(notebook_id, lecture_id):
+    """
+    Действие, осуществляющее загрузку отдельной лекции.
+    Вызывается на странице лекции, которую требуется загрузить.
+    """
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
+    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
+    path = file.body[:-6] + postfix
+
+    return send_file(path, as_attachment=True)
+
+
 @app.route('/delete-lecture<int:notebook_id>-<int:lecture_id>')
 @login_required
 def delete_lecture(notebook_id, lecture_id):
+    """
+    Действие, удаляющее отдельную лекцию.
+    Вызывается на странице лекции или тетради
+    нажатием на значёк мусорки рядом с желаемой лекией в списке лекций в боковой панели.
+    После удаления лекции отправляет пользователя на страницу тетради.
+    """
     db_sess = db_session.create_session()
     file = db_sess.query(Files).filter(Files.id == notebook_id).first()
     postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
@@ -312,7 +311,6 @@ def delete_lecture(notebook_id, lecture_id):
     file_template = file.body[:-6]
     db_sess.commit()
     dir_name = "/".join(path.split("/")[:-1])
-
     os.remove(path)
     files = sorted(os.listdir(dir_name))
     if len(files) > 1:
@@ -329,14 +327,57 @@ def delete_lecture(notebook_id, lecture_id):
         return redirect('/')
 
 
+@app.route('/delete-page<int:notebook_id>-<int:lecture_id>', methods=['POST', 'GET'])
+@login_required
+def delete_page(notebook_id, lecture_id):
+    """
+    Действие, удаляющее отдельную страницу из лекции.
+    Вызывается на странице лекции нажатием на кнопку удалить.
+    Удаляется страница открытая в pdfviewer на данный момент.
+    """
+    global page_number
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
+    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
+    path = file.body[:-6] + postfix
+    page_delete(path, page_number)
+
+    return redirect(f"/lecture{notebook_id}-{lecture_id}")
+
+
 @app.route("/page_num", methods=["POST", "GET"])
 @login_required
 def page_num():
+    """
+    Действие, принимающее по POST запросу номер страницы, отправленный из JS скрипта на клиенте.
+    Присваивает глобальной переменной page_number номер страницы, открытой в pdfviewer у клиента на данный момент.
+    """
     global page_number
     data = request.get_json()
     page_number = int(data['key1'])
     print(page_number)
     return jsonify({'message': 'success'})
+
+
+@app.route('/json')
+def json():
+    """
+    Действие, отправляющее значение глобальной переменной data в JS скрипт на клиенте.
+    Данное действие необходимо для передачи пользователю информации о расположении файла, который он хочет видеть.
+    """
+    global path
+    data = {
+        'key1': path,
+    }
+    return jsonify(data)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    """Действие, осуществляющее разлогинивание"""
+    logout_user()
+    return redirect("/")
 
 
 if __name__ == '__main__':

@@ -1,3 +1,5 @@
+"""Модуль с функциями для создания базы данных и сессии работы с ней"""
+
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
@@ -9,6 +11,11 @@ __factory = None
 
 
 def global_init(db_file):
+    """
+    Создаёт базу данных
+
+    :param db_file: (str) путь до базы данных.
+    """
     global __factory
 
     if __factory:
@@ -29,5 +36,6 @@ def global_init(db_file):
 
 
 def create_session() -> Session:
+    """Создаёт сессию работы с бд"""
     global __factory
     return __factory()
