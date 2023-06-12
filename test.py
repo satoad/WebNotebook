@@ -1,13 +1,13 @@
 import unittest
-from data.files import Files
-from data.users import User
-from data import db_session
-from pdfedit import connect_pdf, add_page, page_delete
+from webnotebook.data.files import Files
+from webnotebook.data.users import User
+from webnotebook.data import db_session
+from webnotebook.pdfedit import connect_pdf, add_page, page_delete
 import PyPDF2
 
 
 class UserModelCase(unittest.TestCase):
-    db_session.global_init("db/users.db")
+    db_session.global_init("webnotebook/db/users.db")
     db_sess = db_session.create_session()
 
     def test_1(self):
