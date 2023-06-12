@@ -1,4 +1,10 @@
-from flask import Flask, request, url_for, render_template, redirect, jsonify, send_file
+from flask import Flask
+from flask import request
+from flask import url_for
+from flask import render_template
+from flask import redirect
+from flask import jsonify
+from flask import send_file
 from data import db_session
 from data.users import User
 from data.files import Files
@@ -7,16 +13,22 @@ from forms.loginform import LoginForm
 from forms.changepassform import ChangepassForm
 from forms.fileuploadform import FileuploadForm
 from forms.lectureuploadform import LectureuploadForm
-from pdfedit import connect_pdf, add_page, page_delete
-from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+from pdfedit import connect_pdf
+from pdfedit import add_page
+from pdfedit import page_delete
+from flask_login import LoginManager
+from flask_login import login_user
+from flask_login import logout_user
+from flask_login import login_required
+from flask_login import current_user
 from werkzeug.utils import secure_filename
-import os, shutil
+import os
+import shutil
 
 app = Flask(__name__, template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
-
 
 
 @login_manager.user_loader
@@ -62,6 +74,7 @@ def index():
         shutil.copy(path, path[:-5] + '1.pdf')
         return redirect('/')
     return render_template('index.html', **param)
+
 
 @app.route('/notebook<int:notebook_id>', methods=['GET', 'POST'])
 def notebook(notebook_id):

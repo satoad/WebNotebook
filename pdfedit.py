@@ -18,7 +18,7 @@ def convert(path):
     os.mkdir(new_path)
     for page_number in range(len(pdf)):
         page = pdf.get_page(page_number)
-        pil_image = page.render(scale=300/72).to_pil()
+        pil_image = page.render(scale=300 / 72).to_pil()
         pil_image.save(new_path + '/page' + str(page_number + 1) + '.png')
 
     return new_path
