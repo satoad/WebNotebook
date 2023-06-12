@@ -6,3 +6,4 @@ __pycache__/*
 *.mo
 *.pot
 */.DS_Store
+/doc/build/*
