@@ -7,17 +7,17 @@ from flask import render_template
 from flask import redirect
 from flask import jsonify
 from flask import send_file
-from data import db_session
-from data.users import User
-from data.files import Files
-from forms.signinform import SigninForm
-from forms.loginform import LoginForm
-from forms.changepassform import ChangepassForm
-from forms.fileuploadform import FileuploadForm
-from forms.lectureuploadform import LectureuploadForm
-from pdfedit import connect_pdf
-from pdfedit import add_page
-from pdfedit import page_delete
+from .data import db_session
+from .data.users import User
+from .data.files import Files
+from .forms.signinform import SigninForm
+from .forms.loginform import LoginForm
+from .forms.changepassform import ChangepassForm
+from .forms.fileuploadform import FileuploadForm
+from .forms.lectureuploadform import LectureuploadForm
+from .pdfedit import connect_pdf
+from .pdfedit import add_page
+from .pdfedit import page_delete
 from flask_login import LoginManager
 from flask_login import login_user
 from flask_login import logout_user
@@ -476,6 +476,8 @@ def ch_translate(path):
     return redirect(f'/{path}')
 
 
-if __name__ == '__main__':
-    db_session.global_init("db/users.db")
+def run():
+    db_session.global_init(os.path.abspath("webnotebook/db/users.db"))
     app.run(port=8080, host='127.0.0.1')
+
+
