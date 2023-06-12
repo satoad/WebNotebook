@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-06-13 00:29+0300\n"
+"POT-Creation-Date: 2023-06-13 00:44+0300\n"
 "PO-Revision-Date: 2023-06-12 23:30+0300\n"
 "Last-Translator: JohannBlood <georg-putilov@mail.ru>\n"
 "Language: ru\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "Login"
 msgstr "Войти"
 
-#: main.py:70 main.py:254
+#: main.py:70 main.py:166 main.py:266
 msgid "My Profile"
 msgstr "Мой профиль"
 
-#: main.py:71 main.py:255
+#: main.py:71 main.py:167 main.py:267
 msgid "My Notebooks"
 msgstr "Мои тетради"
 
@@ -39,7 +39,7 @@ msgstr "Открыть"
 msgid "Download"
 msgstr "Скачать"
 
-#: main.py:74
+#: main.py:74 main.py:174
 msgid "Delete"
 msgstr "Удалить"
 
@@ -47,35 +47,59 @@ msgstr "Удалить"
 msgid "Notebook Name"
 msgstr "Название тетради"
 
-#: main.py:76
+#: main.py:76 main.py:176
 msgid "Upload"
 msgstr "Загрузить"
 
-#: main.py:256
+#: main.py:169
+msgid "Content"
+msgstr "Содержание"
+
+#: main.py:170
+msgid "Lecture"
+msgstr "Лекция"
+
+#: main.py:171
+msgid "Page"
+msgstr "Страница"
+
+#: main.py:172
+msgid "of"
+msgstr "из"
+
+#: main.py:173
+msgid "Go"
+msgstr "Перейти"
+
+#: main.py:175
+msgid "Add page"
+msgstr "Добавить страницу"
+
+#: main.py:268
 msgid "Password change"
 msgstr "Смена пароля"
 
-#: main.py:257
+#: main.py:269
 msgid "Enter password"
 msgstr "Введите пароль"
 
-#: main.py:258
+#: main.py:270
 msgid "Confirm password"
 msgstr "Подтвердите пароль"
 
-#: main.py:259
+#: main.py:271
 msgid "New password"
 msgstr "Новый пароль"
 
-#: main.py:260
+#: main.py:272
 msgid "Confirm new password"
 msgstr "Подтвердите новый пароль"
 
-#: main.py:261
+#: main.py:273
 msgid "Cancel"
 msgstr "Отмена"
 
-#: main.py:262
+#: main.py:274
 msgid "Change"
 msgstr "Сменить"
 
