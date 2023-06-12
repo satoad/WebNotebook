@@ -268,6 +268,8 @@ def download_notebook(notebook_id):
 def delete_notebook(notebook_id):
     db_sess = db_session.create_session()
     files = db_sess.query(Files).filter(Files.id == notebook_id, User.id == current_user.id).first()
+
+    shutil.rmtree("/".join(files.body.split("/")[:-1]))
     if files:
         db_sess.delete(files)
         db_sess.commit()
