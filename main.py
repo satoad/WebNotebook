@@ -222,7 +222,18 @@ def login():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'form': form,
+        'login': _('Login'),
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'email': _('Email'),
+        'enter_email': _('Enter email'),
+        'password': _('Password'),
+        'enter_password': _('Enter password'),
+        'enter': _('Enter'),
+        'new_to_webnotebook': _('New to WebNotebook'),
+        'sign_in': _('Sign in'),
     }
     if form.validate_on_submit():
         db_sess = db_session.create_session()

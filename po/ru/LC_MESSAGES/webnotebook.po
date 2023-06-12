@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-06-13 00:44+0300\n"
+"POT-Creation-Date: 2023-06-13 01:11+0300\n"
 "PO-Revision-Date: 2023-06-12 23:30+0300\n"
 "Last-Translator: JohannBlood <georg-putilov@mail.ru>\n"
 "Language: ru\n"
@@ -19,15 +19,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.12.1\n"
 
-#: main.py:69
+#: main.py:69 main.py:227
 msgid "Login"
 msgstr "Войти"
 
-#: main.py:70 main.py:166 main.py:266
+#: main.py:70 main.py:166 main.py:228 main.py:277
 msgid "My Profile"
 msgstr "Мой профиль"
 
-#: main.py:71 main.py:167 main.py:267
+#: main.py:71 main.py:167 main.py:229 main.py:278
 msgid "My Notebooks"
 msgstr "Мои тетради"
 
@@ -75,31 +75,55 @@ msgstr "Перейти"
 msgid "Add page"
 msgstr "Добавить страницу"
 
-#: main.py:268
-msgid "Password change"
-msgstr "Смена пароля"
+#: main.py:230
+msgid "Email"
+msgstr "Почта"
 
-#: main.py:269
+#: main.py:231
+msgid "Enter email"
+msgstr "Введите почту"
+
+#: main.py:232
+msgid "Password"
+msgstr "Пароль"
+
+#: main.py:233 main.py:280
 msgid "Enter password"
 msgstr "Введите пароль"
 
-#: main.py:270
+#: main.py:234
+msgid "Enter"
+msgstr "Войти"
+
+#: main.py:235
+msgid "New to WebNotebook"
+msgstr "Ещё не зарегистрированы"
+
+#: main.py:236
+msgid "Sign in"
+msgstr "Регистрация"
+
+#: main.py:279
+msgid "Password change"
+msgstr "Смена пароля"
+
+#: main.py:281
 msgid "Confirm password"
 msgstr "Подтвердите пароль"
 
-#: main.py:271
+#: main.py:282
 msgid "New password"
 msgstr "Новый пароль"
 
-#: main.py:272
+#: main.py:283
 msgid "Confirm new password"
 msgstr "Подтвердите новый пароль"
 
-#: main.py:273
+#: main.py:284
 msgid "Cancel"
 msgstr "Отмена"
 
-#: main.py:274
+#: main.py:285
 msgid "Change"
 msgstr "Сменить"
 
