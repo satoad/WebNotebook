@@ -289,6 +289,33 @@ def delete_notebook(notebook_id):
     return redirect('/')
 
 
+@app.route('/delete-lecture<int:notebook_id>-<int:lecture_id>')
+@login_required
+def delete_lecture(notebook_id, lecture_id):
+    db_sess = db_session.create_session()
+    file = db_sess.query(Files).filter(Files.id == notebook_id).first()
+    postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
+    path = file.body[:-6] + postfix
+    file.lect_num -= 1
+    file_template = file.body[:-6]
+    db_sess.commit()
+    dir_name = "/".join(path.split("/")[:-1])
+
+    os.remove(path)
+    files = sorted(os.listdir(dir_name))
+    if len(files) > 1:
+        for index, file in enumerate(files):
+            if file[-6:] != "00.pdf":
+                if index < 10:
+                    os.rename(os.path.join(dir_name, file), ''.join([file_template, '0', str(index), '.pdf']))
+                else:
+                    os.rename(os.path.join(dir_name, file), ''.join([file_template, str(index), '.pdf']))
+        connect_pdf(dir_name)
+        return redirect(f"/notebook{notebook_id}")
+    else:
+        delete_notebook(notebook_id)
+        return redirect('/')
+
 @app.route("/page_num", methods=["POST", "GET"])
 @login_required
 def page_num():
