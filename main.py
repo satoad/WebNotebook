@@ -26,11 +26,19 @@ from flask_login import current_user
 from werkzeug.utils import secure_filename
 import os
 import shutil
+import gettext
 
 app = Flask(__name__, template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
+popath = os.path.join(os.path.dirname(__file__), 'po')
+translation_en = gettext.translation("webnotebook", popath, fallback=True, languages='en')
+translation_ru = gettext.translation("webnotebook", popath, fallback=True)
+ru = translation_ru.gettext
+en = translation_en.gettext
+_ = ru
 
 
 @login_manager.user_loader
@@ -56,7 +64,16 @@ def index():
         'circle': url_for('static', filename='sources/icons/person-circle.svg'),
         'authorized': current_user.is_authenticated,
         'form': form,
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'notebooks': [],
+        'login': _('Login'),
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'open': _('Open'),
+        'download': _('Download'),
+        'delete': _('Delete'),
+        'notebook_name': _('Notebook Name'),
+        'upload': _('Upload'),
     }
     if current_user.is_authenticated:
         param['username'] = current_user.name
@@ -377,6 +394,19 @@ def json():
 def logout():
     """Действие, осуществляющее разлогинивание"""
     logout_user()
+    return redirect("/")
+
+
+@app.route('/translate')
+def ch_translate():
+    """Действие, меняет локаль"""
+    global _
+    global ru
+    global en
+    if _ == ru:
+        _ = en
+    else:
+        _ = ru
     return redirect("/")
 
 

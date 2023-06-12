@@ -17,15 +17,19 @@
                 WebNotebook
               </a>
               {% if authorized %}
-                <a href="profile">
-                  <div class="authorized-user">
-                    <span>{{ username }}</span>
-                    <img src="{{ circle }}" alt="profile-pic" width="30">
-                  </div>
-                </a>
+                <div style="display:flex;">
+                  <a href="translate" style="margin-right: 100px;"><img src="{{ translate }}" width="30"></a>
+                  <a href="profile">
+                    <div class="authorized-user">
+                      <span>{{ username }}</span>
+                      <img src="{{ circle }}" alt="profile-pic" width="30">
+                    </div>
+                  </a>
+                </div>
               {% else %}
                 <div class="authorized-user">
-                  <a href="login" class="btn btn-outline-primary">Войти</a>
+                  <a href="/translate" style="margin-right: 100px;"><img src="{{ translate }}" width="30"></a>
+                  <a href="login" class="btn btn-outline-primary">{{ login }}</a>
                 </div>
               {% endif %}
             </div>
@@ -35,19 +39,19 @@
 
       <div class="sidebar">
         <ul class="nav-sidebar">
-            <li class="nav-sidebar__link"><a href="profile">Мой профиль</a></li>
-            <li class="nav-sidebar__link"><a href="#">Мои тетради</a></li>
+            <li class="nav-sidebar__link"><a href="profile">{{ my_profile }}</a></li>
+            <li class="nav-sidebar__link"><a href="#">{{ my_notebooks }}</a></li>
         </ul>
         <div class="sidebar__line"></div>
         <form action="" class="upload" method = "post" enctype="multipart/form-data">
           {{ form.hidden_tag() }}
           <p>
-            {{ form.file.label }}<br>
+            <label for="input-file">{{ upload }}</label><br>
             {{ form.file(accept="application/pdf") }}<br>
           </p>
           <p>
-            {{ form.name.label }}<br>
-            {{ form.name(class="form-control", placeholder="Название тетради") }}<br>
+            <label for="input-file">{{ notebook_name }}</label><br>
+            {{ form.name(class="form-control", placeholder=notebook_name) }}<br>
             {% for error in form.name.errors %}
                 <p class="alert alert-danger" role="alert">
                     {{ error }}
@@ -59,7 +63,7 @@
       </div>
 
       <div class="body bg-light-subtle">
-          <h3 class="body__title">Мои тетради</h3>
+          <h3 class="body__title">{{ my_notebooks }}</h3>
 
           <div class="notes row">
             {% for notebook in notebooks %}
@@ -71,15 +75,15 @@
                   <div class="card-body">
                     <h5 class="card-title">{{ notebook.name }}</h5>
                     <div class="card__btn-group">
-                      <a href="notebook{{ notebook.id }}" class="btn btn-outline-primary">Открыть</a>
+                      <a href="notebook{{ notebook.id }}" class="btn btn-outline-primary">{{ open }}</a>
                       <div class="dropdown">
                         <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                           <img src="{{ three_dots }}" alt="" width="20">
                         </a>
                         <ul class="dropdown-menu">
-                          <li><a class="dropdown-item" href="/download-notebook{{ notebook.id }}">Скачать</a></li>
+                          <li><a class="dropdown-item" href="/download-notebook{{ notebook.id }}">{{ download }}</a></li>
                           <li><hr class="dropdown-divider"></li>
-                          <li><a class="dropdown-item" href="/delete-notebook{{ notebook.id }}">Удалить</a></li>
+                          <li><a class="dropdown-item" href="/delete-notebook{{ notebook.id }}">{{ delete }}</a></li>
                         </ul>
                       </div>
                     </div>

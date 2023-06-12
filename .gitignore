@@ -3,3 +3,5 @@ static/sources/notebooks/*
 db/*
 __pycache__/*
 .idea/*
+*.mo
+*.pot
