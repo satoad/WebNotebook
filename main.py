@@ -62,9 +62,9 @@ def index():
         'three_dots': url_for('static', filename='sources/icons/three-dots-vertical.svg'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
         'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'authorized': current_user.is_authenticated,
         'form': form,
-        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'notebooks': [],
         'login': _('Login'),
         'my_profile': _('My Profile'),
@@ -116,12 +116,23 @@ def notebook(notebook_id):
         'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
         'download': url_for('static', filename='sources/icons/download.svg'),
         'trash': url_for('static', filename='sources/icons/trash.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'username': current_user.name,
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'form': form,
         'lect_num': file.lect_num + 1,
         'notebook_id': file.id,
         'notebook_name': file.name,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'path': f'notebook{notebook_id}',
+        'content': _('Content'),
+        'lecture': _('Lecture'),
+        'page': _('Page'),
+        'of': _('of'),
+        'go': _('Go'),
+        'add_page': _('Add page'),
+        'upload': _('Upload'),
     }
     if form.validate_on_submit():
         f = form.file.data
@@ -156,12 +167,24 @@ def lecture(notebook_id, lecture_id):
         'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
         'download': url_for('static', filename='sources/icons/download.svg'),
         'trash': url_for('static', filename='sources/icons/trash.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'username': current_user.name,
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'lect_num': file.lect_num + 1,
         'notebook_id': file.id,
         'lecture_id': lecture_id,
         'form': form,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'path': f'lecture{notebook_id}-{lecture_id}',
+        'content': _('Content'),
+        'lecture': _('Lecture'),
+        'page': _('Page'),
+        'of': _('of'),
+        'go': _('Go'),
+        'delete': _('Delete'),
+        'add_page': _('Add page'),
+        'upload': _('Upload'),
     }
     if form.validate_on_submit():
         f = form.file.data
@@ -181,7 +204,20 @@ def signin():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'form': form,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'username': _('Username'),
+        'enter_uname': _('Enter username'),
+        'email': _('Email'),
+        'enter_email': _('Enter email'),
+        'password': _('Password'),
+        'enter_password': _('Enter password'),
+        'confirm_password': _('Confirm password'),
+        'already': _('Already have a WebNotebook account'),
+        'sign_up': _('Sign up'),
+        'log_in': _('Log in'),
     }
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -210,7 +246,18 @@ def login():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'form': form,
+        'login': _('Login'),
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'email': _('Email'),
+        'enter_email': _('Enter email'),
+        'password': _('Password'),
+        'enter_password': _('Enter password'),
+        'enter': _('Enter'),
+        'new_to_webnotebook': _('New to WebNotebook'),
+        'sign_in': _('Sign up'),
     }
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -232,8 +279,15 @@ def profile():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'username': current_user.name,
         'email': current_user.email,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'name': _('Name'),
+        'mail': _('Email'),
+        'change_password': _('Change password'),
+        'log_out': _('Log out'),
     }
     return render_template('profile.html', **param)
 
@@ -247,7 +301,19 @@ def changepass():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'circle': url_for('static', filename='sources/icons/person-circle.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'form': form,
+        'username': current_user.name,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'password_change': _('Password change'),
+        'enter_password': _('Enter password'),
+        'confirm_password': _('Confirm password'),
+        'new_password': _('New password'),
+        'confirm_new_password': _('Confirm new password'),
+        'cancel': _('Cancel'),
+        'change': _('Change'),
     }
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -397,8 +463,8 @@ def logout():
     return redirect("/")
 
 
-@app.route('/translate')
-def ch_translate():
+@app.route('/translate-<path>')
+def ch_translate(path):
     """Действие, меняет локаль"""
     global _
     global ru
@@ -407,7 +473,7 @@ def ch_translate():
         _ = en
     else:
         _ = ru
-    return redirect("/")
+    return redirect(f'/{path}')
 
 
 if __name__ == '__main__':
