@@ -116,12 +116,23 @@ def notebook(notebook_id):
         'arrow_right': url_for('static', filename='sources/icons/arrow-right.svg'),
         'download': url_for('static', filename='sources/icons/download.svg'),
         'trash': url_for('static', filename='sources/icons/trash.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'username': current_user.name,
         'pdfviewer': url_for('static', filename='scripts/pdfviewer.js'),
         'form': form,
         'lect_num': file.lect_num + 1,
         'notebook_id': file.id,
         'notebook_name': file.name,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'path': f'notebook{notebook_id}',
+        'content': _('Content'),
+        'lecture': _('Lecture'),
+        'page': _('Page'),
+        'of': _('of'),
+        'go': _('Go'),
+        'add_page': _('Add page'),
+        'upload': _('Upload'),
     }
     if form.validate_on_submit():
         f = form.file.data
@@ -193,7 +204,20 @@ def signin():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'form': form,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'username': _('Username'),
+        'enter_uname': _('Enter username'),
+        'email': _('Email'),
+        'enter_email': _('Enter email'),
+        'password': _('Password'),
+        'enter_password': _('Enter password'),
+        'confirm_password': _('Confirm password'),
+        'already': _('Already have a WebNotebook account'),
+        'sign_up': _('Sign up'),
+        'log_in': _('Log in'),
     }
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
@@ -233,7 +257,7 @@ def login():
         'enter_password': _('Enter password'),
         'enter': _('Enter'),
         'new_to_webnotebook': _('New to WebNotebook'),
-        'sign_in': _('Sign in'),
+        'sign_in': _('Sign up'),
     }
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -255,8 +279,15 @@ def profile():
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
         'clouds': url_for('static', filename='sources/icons/clouds.svg'),
+        'translate': url_for('static', filename='sources/icons/translate.svg'),
         'username': current_user.name,
         'email': current_user.email,
+        'my_profile': _('My Profile'),
+        'my_notebooks': _('My Notebooks'),
+        'name': _('Name'),
+        'mail': _('Email'),
+        'change_password': _('Change password'),
+        'log_out': _('Log out'),
     }
     return render_template('profile.html', **param)
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-06-13 01:11+0300\n"
+"POT-Creation-Date: 2023-06-13 01:39+0300\n"
 "PO-Revision-Date: 2023-06-12 23:30+0300\n"
 "Last-Translator: JohannBlood <georg-putilov@mail.ru>\n"
 "Language: ru\n"
@@ -19,15 +19,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.12.1\n"
 
-#: main.py:69 main.py:227
+#: main.py:69 main.py:251
 msgid "Login"
 msgstr "Войти"
 
-#: main.py:70 main.py:166 main.py:228 main.py:277
+#: main.py:70 main.py:126 main.py:177 main.py:209 main.py:252 main.py:285
+#: main.py:308
 msgid "My Profile"
 msgstr "Мой профиль"
 
-#: main.py:71 main.py:167 main.py:229 main.py:278
+#: main.py:71 main.py:127 main.py:178 main.py:210 main.py:253 main.py:286
+#: main.py:309
 msgid "My Notebooks"
 msgstr "Мои тетради"
 
@@ -39,7 +41,7 @@ msgstr "Открыть"
 msgid "Download"
 msgstr "Скачать"
 
-#: main.py:74 main.py:174
+#: main.py:74 main.py:185
 msgid "Delete"
 msgstr "Удалить"
 
@@ -47,83 +49,115 @@ msgstr "Удалить"
 msgid "Notebook Name"
 msgstr "Название тетради"
 
-#: main.py:76 main.py:176
+#: main.py:76 main.py:135 main.py:187
 msgid "Upload"
 msgstr "Загрузить"
 
-#: main.py:169
+#: main.py:129 main.py:180
 msgid "Content"
 msgstr "Содержание"
 
-#: main.py:170
+#: main.py:130 main.py:181
 msgid "Lecture"
 msgstr "Лекция"
 
-#: main.py:171
+#: main.py:131 main.py:182
 msgid "Page"
 msgstr "Страница"
 
-#: main.py:172
+#: main.py:132 main.py:183
 msgid "of"
 msgstr "из"
 
-#: main.py:173
+#: main.py:133 main.py:184
 msgid "Go"
 msgstr "Перейти"
 
-#: main.py:175
+#: main.py:134 main.py:186
 msgid "Add page"
 msgstr "Добавить страницу"
 
-#: main.py:230
+#: main.py:211
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: main.py:212
+msgid "Enter username"
+msgstr "Введите имя"
+
+#: main.py:213 main.py:254 main.py:288
 msgid "Email"
 msgstr "Почта"
 
-#: main.py:231
+#: main.py:214 main.py:255
 msgid "Enter email"
 msgstr "Введите почту"
 
-#: main.py:232
+#: main.py:215 main.py:256
 msgid "Password"
 msgstr "Пароль"
 
-#: main.py:233 main.py:280
+#: main.py:216 main.py:257 main.py:311
 msgid "Enter password"
 msgstr "Введите пароль"
 
-#: main.py:234
-msgid "Enter"
-msgstr "Войти"
-
-#: main.py:235
-msgid "New to WebNotebook"
-msgstr "Ещё не зарегистрированы"
-
-#: main.py:236
-msgid "Sign in"
-msgstr "Регистрация"
-
-#: main.py:279
-msgid "Password change"
-msgstr "Смена пароля"
-
-#: main.py:281
+#: main.py:217 main.py:312
 msgid "Confirm password"
 msgstr "Подтвердите пароль"
 
-#: main.py:282
+#: main.py:218
+msgid "Already have a WebNotebook account"
+msgstr "Уже зарегистрированы"
+
+#: main.py:219
+msgid "Sign up"
+msgstr "Регистрация"
+
+#: main.py:220
+msgid "Log in"
+msgstr "Войти"
+
+#: main.py:258
+msgid "Enter"
+msgstr "Войти"
+
+#: main.py:259
+msgid "New to WebNotebook"
+msgstr "Ещё не зарегистрированы"
+
+#: main.py:260
+msgid "Sign in"
+msgstr "Регистрация"
+
+#: main.py:287
+msgid "Name"
+msgstr "Имя"
+
+#: main.py:289
+msgid "Change password"
+msgstr "Сменить пароль"
+
+#: main.py:290
+msgid "Log out"
+msgstr "Выйти"
+
+#: main.py:310
+msgid "Password change"
+msgstr "Смена пароля"
+
+#: main.py:313
 msgid "New password"
 msgstr "Новый пароль"
 
-#: main.py:283
+#: main.py:314
 msgid "Confirm new password"
 msgstr "Подтвердите новый пароль"
 
-#: main.py:284
+#: main.py:315
 msgid "Cancel"
 msgstr "Отмена"
 
-#: main.py:285
+#: main.py:316
 msgid "Change"
 msgstr "Сменить"
 
