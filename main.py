@@ -1,4 +1,4 @@
-from flask import Flask, request, url_for, render_template, redirect, session, jsonify, send_file
+from flask import Flask, request, url_for, render_template, redirect, jsonify, send_file
 from data import db_session
 from data.users import User
 from data.files import Files
@@ -12,7 +12,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 from werkzeug.utils import secure_filename
 import os, shutil
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='templates')
 login_manager = LoginManager()
 login_manager.init_app(app)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -162,7 +162,7 @@ def signin():
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             param['message'] = "Такой пользователь уже есть"
-            return render_template('register.html', **param)
+            return render_template('signin.html', **param)
         user = User(
             name=form.name.data,
             email=form.email.data
@@ -219,7 +219,6 @@ def logout():
 @login_required
 def changepass():
     form = ChangepassForm()
-    param = {}
     param = {
         'bootstrap': url_for('static', filename='css/bootstrap.min.css'),
         'style': url_for('static', filename='css/style.css'),
@@ -248,19 +247,19 @@ def download_lecture(notebook_id, lecture_id):
 
     return send_file(path, as_attachment=True)
 
+
 @app.route('/delete-page<int:notebook_id>-<int:lecture_id>', methods=['POST', 'GET'])
 @login_required
 def delete_page(notebook_id, lecture_id):
     global page_number
-    print(notebook_id, lecture_id)
     db_sess = db_session.create_session()
     file = db_sess.query(Files).filter(Files.id == notebook_id).first()
     postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
     path = file.body[:-6] + postfix
-    print(path)
     page_delete(path, page_number)
 
     return redirect(f"/lecture{notebook_id}-{lecture_id}")
+
 
 @app.route('/download-notebook<notebook_id>')
 @login_required
@@ -316,6 +315,7 @@ def delete_lecture(notebook_id, lecture_id):
         delete_notebook(notebook_id)
         return redirect('/')
 
+
 @app.route("/page_num", methods=["POST", "GET"])
 @login_required
 def page_num():
@@ -324,7 +324,6 @@ def page_num():
     page_number = int(data['key1'])
     print(page_number)
     return jsonify({'message': 'success'})
-
 
 
 if __name__ == '__main__':
