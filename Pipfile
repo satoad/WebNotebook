@@ -17,6 +17,7 @@ pypdfium2 = "*"
 pillow = "*"
 pypdf2 = "*"
 babel = "*"
+sphinx = "*"
 
 [requires]
 python_version = "3.10"
