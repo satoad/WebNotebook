@@ -21,18 +21,6 @@ def task_whl():
     }
 
 
-def create_directories():
-    os.makedirs('webnotebook', exist_ok=True)
-    os.chdir('webnotebook')
-    os.makedirs('db', exist_ok=True)
-
-
-def task_create_directories():
-    return {
-        'actions': [create_directories],
-        'verbosity': 2
-    }
-
 def task_babel():
     return {
         "actions": ["pybabel compile -D webnotebook -d po -l ru"],
