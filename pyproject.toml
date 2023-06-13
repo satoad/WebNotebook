@@ -6,8 +6,8 @@ readme = "README.rst"
 requires-python = ">=3.10"
 license = {file = "COPYING"}
 authors = [
- {name = "Maksim V. Tyushev (aka mandesero)", email = "mandesero@gmail.com"},
- {name = "Bogdan S. Purtov", email = "b@mail.ru"}
+ {name = "George K. Putilov (aka JohannBlood)", email = "georg-putilov@mail.ru"},
+ {name = "Vitaliy D. Sagalevich", email = "vsagalev@gmail.com"},
 ]
 
 keywords = ["aiogram", "project"]
