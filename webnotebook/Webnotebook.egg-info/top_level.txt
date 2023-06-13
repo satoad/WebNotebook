@@ -1,0 +1,6 @@
+data
+db
+forms
+po
+static
+templates

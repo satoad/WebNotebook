@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ bootstrap }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <title>WebNotebook</title>
+</head>
+<body class="bg-info-subtle">
+    <header>
+        <nav class="navbar bg-info-subtle">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="#">
+                <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
+                WebNotebook
+              </a>
+              {% if authorized %}
+                <div style="display:flex;">
+                  <a href="translate-index" style="margin-right: 100px;"><img src="{{ translate }}" width="30"></a>
+                  <a href="profile">
+                    <div class="authorized-user">
+                      <span>{{ username }}</span>
+                      <img src="{{ circle }}" alt="profile-pic" width="30">
+                    </div>
+                  </a>
+                </div>
+              {% else %}
+                <div class="authorized-user">
+                  <a href="/translate" style="margin-right: 100px;"><img src="{{ translate }}" width="30"></a>
+                  <a href="login" class="btn btn-outline-primary">{{ login }}</a>
+                </div>
+              {% endif %}
+            </div>
+          </nav>
+    </header>
+    <main class="main">
+
+      <div class="sidebar">
+        <ul class="nav-sidebar">
+            <li class="nav-sidebar__link"><a href="profile">{{ my_profile }}</a></li>
+            <li class="nav-sidebar__link"><a href="#">{{ my_notebooks }}</a></li>
+        </ul>
+        <div class="sidebar__line"></div>
+        <form action="" class="upload" method = "post" enctype="multipart/form-data">
+          {{ form.hidden_tag() }}
+          <p>
+            <label for="input-file">{{ upload }}</label><br>
+            {{ form.file(accept="application/pdf") }}<br>
+          </p>
+          <p>
+            <label for="input-file">{{ notebook_name }}</label><br>
+            {{ form.name(class="form-control", placeholder=notebook_name) }}<br>
+            {% for error in form.name.errors %}
+                <p class="alert alert-danger" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+        </p>
+          <p>{{ form.submit(type="submit", class="btn btn-primary", value=upload) }}</p>
+        </form>
+      </div>
+
+      <div class="body bg-light-subtle">
+          <h3 class="body__title">{{ my_notebooks }}</h3>
+
+          <div class="notes row">
+            {% for notebook in notebooks %}
+              <div class="note-wrapper col-xl-3 col-md-4">
+                <div class="note-card card" style="width: 18rem;">
+                  <div class="note-card__pic card-img-top">
+                    <img src="{{ doc }}" alt="doc" width="30">
+                  </div>
+                  <div class="card-body">
+                    <h5 class="card-title">{{ notebook.name }}</h5>
+                    <div class="card__btn-group">
+                      <a href="notebook{{ notebook.id }}" class="btn btn-outline-primary">{{ open }}</a>
+                      <div class="dropdown">
+                        <a class="btn" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                          <img src="{{ three_dots }}" alt="" width="20">
+                        </a>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item" href="/download-notebook{{ notebook.id }}">{{ download }}</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          <li><a class="dropdown-item" href="/delete-notebook{{ notebook.id }}">{{ delete }}</a></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+      </div>
+    </main>
+
+  <script src="{{ bootstrap_js }}"></script>
+</body>
+</html>

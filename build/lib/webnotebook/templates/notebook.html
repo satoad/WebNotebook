@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ bootstrap }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <title>WebNotebook</title>
+</head>
+<body class="bg-info-subtle">
+    <header>
+        <nav class="navbar bg-info-subtle">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="index">
+                <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
+                WebNotebook
+              </a>
+              <div style="display:flex;">
+                <a href="translate-{{ path }}" style="margin-right: 100px;"><img src="{{ translate }}" width="30"></a>
+                <a href="profile">
+                  <div class="authorized-user">
+                    <span>{{ username }}</span>
+                    <img src="{{ circle }}" alt="profile-pic" width="30">
+                  </div>
+                </a>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main class="main">
+        <div class="sidebar">
+            <ul class="nav-sidebar">
+                <li class="nav-sidebar__link"><a href="profile">{{ my_profile }}</a></li>
+                <li class="nav-sidebar__link"><a href="index">{{ my_notebooks }}</a></li>
+            </ul>
+            <div class="sidebar__line"></div>
+            <div class="note-content">
+              <a href="">
+                <h5>{{ content }}</h5>
+              </a>
+                <ul class="content__list">
+                    {% for i in range(1, lect_num) %}
+                    <li class="content__item">
+                      <a href="/lecture{{ notebook_id }}-{{ i }}">{{ lecture }} {{ i }}</a>
+                      <a href="/delete-lecture{{ notebook_id }}-{{ i }}" class="btn"><img src="{{ trash }}" alt=""></a>
+                  </li>
+                    {% endfor %}
+                </ul>
+            </div>
+          </div>
+
+        <div class="body bg-light-subtle">
+          <h3 class="body__title">{{ notebook_name }}</h3>
+          <div class="notebook">
+            <div class="top-bar">
+              <span class="page-info">
+                {{ page }}: <input class="page-input" type="number" id="page-input" min="1" value="1"> {{ of }} <span id="page-count"></span>
+                <span id="page-num"></span>
+              </span>
+              <button class="top-bar__btn go-button" id="go-button">{{ go }}</button>
+              <button class="top-bar__btn" id="prev-page">
+                <img src="{{ arrow_left }}" alt="">
+              </button>
+              <button class="top-bar__btn" id="next-page">
+                <img src="{{ arrow_right }}" alt="">
+              </button>
+                <a href="/download-notebook{{ notebook_id }}" class="top-bar__btn btn download-btn"> <img src="{{ download }}" alt=""></a>
+                <div class="add-page">
+                <span>{{ add_page }}:</span>
+                <form action="" class="add-input" method = "post" enctype="multipart/form-data">
+                  {{ form.hidden_tag() }}
+                  {{ form.file(accept="application/pdf") }}
+                  <p>{{ form.submit(type="submit", value=upload) }}</p>
+                </form>
+              </div>
+            </div>
+
+            <canvas class="page" id="pdf-render"></canvas>
+          </div>
+        </div>
+    </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.11.338/pdf.min.js"></script>
+  <script src="{{ pdfviewer }}"></script>
+</body>
+</html>

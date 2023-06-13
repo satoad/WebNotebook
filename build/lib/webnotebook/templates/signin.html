@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ bootstrap }}">
+    <link rel="stylesheet" href="{{ style }}">
+    <title>WebNotebook</title>
+</head>
+<body class="bg-info-subtle">
+    <header>
+        <nav class="navbar bg-info-subtle">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="index">
+                <img src="{{ clouds }}" alt="Logo" width="50" height="32" class="d-inline-block align-text-top">
+                WebNotebook
+              </a>
+              <div style="display:flex;">
+                <a href="translate-signin" style="margin-right: 100px;"><img src="{{ translate }}" width="30"></a>
+              </div>
+            </div>
+          </nav>
+    </header>
+    <main class="main">
+        <div class="sidebar">
+            <ul class="nav-sidebar">
+                <li class="nav-sidebar__link"><a href="profile">{{ my_profile }}</a></li>
+                <li class="nav-sidebar__link"><a href="index">{{ my_notebooks }}</a></li>
+            </ul>
+            <div class="sidebar__line"></div>
+          </div>
+
+        <div class="body bg-light-subtle">
+          <h3 class="body__title">{{ sign_up }}</h3>
+          
+          <div class="signin-wrapper border rounded">            
+            <form action="" method="post" class="signin" autocomplete="on">
+                {{ form.hidden_tag() }}
+                <p>
+                    <label>{{ username }}</label><br>
+                    {{ form.name(class="form-control", placeholder=enter_uname) }}<br>
+                    {% for error in form.name.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>
+                    <label>{{ email }}</label><br>
+                    {{ form.email(class="form-control", type="email", placeholder=enter_email) }}<br>
+                    {% for error in form.email.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>
+                    <label>{{ password }}</label><br>
+                    {{ form.password(class="form-control", type="password", placeholder=enter_password) }}<br>
+                    {% for error in form.password.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>
+                    <label>{{ confirm_password }}</label><br>
+                    {{ form.password_again(class="form-control", type="password", placeholder=enter_password) }}<br>
+                    {% for error in form.password_again.errors %}
+                        <p class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </p>
+                <p>{{ form.submit(type="submit", class="btn btn-primary", value=sign_up) }}</p>
+                {{message}}
+            </form>
+            <div class="to-login border-top">
+              <span>{{ already }}?</span>
+              <a href="login" class="btn btn-outline-primary">{{ log_in }}</a>
+            </div>
+          </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: Webnotebook
+Version: 1.0
+Summary: Webnotebook
+Author-email: "Maksim V. Tyushev (aka mandesero)" <mandesero@gmail.com>, "Bogdan S. Purtov" <b@mail.ru>
+Keywords: aiogram,project
+Classifier: Development Status :: 4 - Beta
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.11
+Description-Content-Type: text/x-rst
