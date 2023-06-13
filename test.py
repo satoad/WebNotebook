@@ -11,7 +11,7 @@ import PyPDF2
 class UserModelCase(unittest.TestCase):
     """Тесты"""
 
-    db_session.global_init("webnotebook/db/users.db")
+    db_session.global_init("webnotebook/users.db")
     db_sess = db_session.create_session()
 
     def test_1(self):
