@@ -1,3 +1,5 @@
+"""Тесты"""
+
 import unittest
 from webnotebook.data.files import Files
 from webnotebook.data.users import User
@@ -7,16 +9,20 @@ import PyPDF2
 
 
 class UserModelCase(unittest.TestCase):
+    """Тесты"""
+
     db_session.global_init("webnotebook/db/users.db")
     db_sess = db_session.create_session()
 
     def test_1(self):
+        """Тест хэширования пароля"""
         u = User(name='susan', email='susan@example.com')
         u.set_password('cat')
         self.assertFalse(u.check_password('dog'))
         self.assertTrue(u.check_password('cat'))
 
     def test_2(self):
+        """Тест таблицы пользователей"""
         u1 = User(name='john', email='lol@example.com')
         u1.set_password('cat')
         u2 = User(name='susan', email='kek@example.com')
@@ -42,6 +48,7 @@ class UserModelCase(unittest.TestCase):
                 self.db_sess.commit()
 
     def test_3(self):
+        """Тест таблицы файлов"""
         u1 = User(name='john', email='john@example.com')
         u1.set_password('cat')
         u2 = User(name='susan', email='susan@example.com')
@@ -81,6 +88,7 @@ class UserModelCase(unittest.TestCase):
                 self.db_sess.commit()
 
     def test_4(self):
+        """Тест функции склеивания пдф"""
         path = "webnotebook/static/sources/pdf_test"
         self.assertEqual(connect_pdf(path), path + "/test_00.pdf")
 
@@ -109,6 +117,7 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(totalpages, sum_of_pages)
 
     def test_5(self):
+        """Тест функции удаления страницы"""
         path = "webnotebook/static/sources/pdf_test/test_03.pdf"
         file = open(path, 'rb')
         readpdf = PyPDF2.PdfReader(file)
@@ -125,6 +134,7 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(totalpages_before - 1, totalpages_after)
 
     def test_6(self):
+        """Тест функции добавления страницы"""
         path_to_pdf = "webnotebook/static/sources/pdf_test/test_03.pdf"
 
         file = open(path_to_pdf, 'rb')

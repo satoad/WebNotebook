@@ -8,4 +8,6 @@ __pycache__/*
 /doc/build/*
 *.egg-info
 dist
-*.db
+webnotebook/users.db
+build
+webnotebook/static/sources/p*

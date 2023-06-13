@@ -483,7 +483,6 @@ def ch_translate(path):
 
 
 def run():
+    """Основная функция, подключается к бд и запускает приложени"""
     db_session.global_init(os.path.join(os.path.dirname(__file__), 'users.db'))
     app.run(port=8080, host='127.0.0.1')
-
-
