@@ -1,6 +1,5 @@
-files/*
-static/sources/notebooks/*
-db/*
+webnotebook/static/sources/notebooks/*
+webnotebook/db/*
 __pycache__/*
 .idea/*
 *.mo

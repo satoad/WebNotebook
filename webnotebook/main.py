@@ -40,6 +40,10 @@ ru = translation_ru.gettext
 en = translation_en.gettext
 _ = ru
 
+basepath = os.path.dirname(__file__)[len(os.getcwd()) + 1:]
+print(os.getcwd())
+print(basepath)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -88,9 +92,11 @@ def index():
         file = Files(body=str(os.path.join(f'static/sources/notebooks/{dirname}', filename)), name=form.name.data)
         user.files.append(file)
         db_sess.commit()
-        if not os.path.exists(f'static/sources/notebooks/{dirname}'):
-            os.makedirs(f'static/sources/notebooks/{dirname}')
-        path = os.path.join(f'static/sources/notebooks/{dirname}', filename)
+        temp = os.path.join(basepath, f'static/sources/notebooks/{dirname}')
+        print(temp)
+        if not os.path.exists(temp):
+            os.makedirs(temp)
+        path = os.path.join(temp, filename)
         f.save(path)
         shutil.copy(path, path[:-5] + '1.pdf')
         return redirect('/')
@@ -140,8 +146,8 @@ def notebook(notebook_id):
         filename = path[:-6] + postfix
         file.lect_num = file.lect_num + 1
         db_sess.commit()
-        f.save(filename)
-        connect_pdf(os.path.dirname(path))
+        f.save(os.path.join(basepath, filename))
+        connect_pdf(os.path.dirname(os.path.join(basepath, filename)))
         return redirect(f'/notebook{notebook_id}')
     return render_template('notebook.html', **param)
 
@@ -190,8 +196,8 @@ def lecture(notebook_id, lecture_id):
         f = form.file.data
         filename = secure_filename(f.filename)
         filename = os.path.join(os.path.dirname(path), filename)
-        f.save(filename)
-        add_page(path, filename, page_number)
+        f.save(os.path.join(basepath, filename))
+        add_page(os.path.join(basepath, path), os.path.join(basepath, filename), page_number)
         return render_template('lecture.html', **param)
     return render_template('lecture.html', **param)
 
@@ -355,7 +361,7 @@ def delete_notebook(notebook_id):
     db_sess = db_session.create_session()
     files = db_sess.query(Files).filter(Files.id == notebook_id, User.id == current_user.id).first()
 
-    shutil.rmtree("/".join(files.body.split("/")[:-1]))
+    shutil.rmtree(os.path.dirname(os.path.join(basepath, files.body)))
     if files:
         db_sess.delete(files)
         db_sess.commit()
@@ -394,16 +400,16 @@ def delete_lecture(notebook_id, lecture_id):
     file_template = file.body[:-6]
     db_sess.commit()
     dir_name = "/".join(path.split("/")[:-1])
-    os.remove(path)
-    files = sorted(os.listdir(dir_name))
+    os.remove(os.path.join(basepath, path))
+    files = sorted(os.listdir(os.path.join(basepath, dir_name)))
     if len(files) > 1:
         for index, file in enumerate(files):
             if file[-6:] != "00.pdf":
                 if index < 10:
-                    os.rename(os.path.join(dir_name, file), ''.join([file_template, '0', str(index), '.pdf']))
+                    os.rename(os.path.join(basepath, os.path.join(dir_name, file)), os.path.join(basepath, ''.join([file_template, '0', str(index), '.pdf'])))
                 else:
-                    os.rename(os.path.join(dir_name, file), ''.join([file_template, str(index), '.pdf']))
-        connect_pdf(dir_name)
+                    os.rename(os.path.join(basepath, os.path.join(dir_name, file)), os.path.join(basepath, ''.join([file_template, str(index), '.pdf'])))
+        connect_pdf(os.path.join(basepath, dir_name))
         return redirect(f"/notebook{notebook_id}")
     else:
         delete_notebook(notebook_id)
@@ -423,7 +429,7 @@ def delete_page(notebook_id, lecture_id):
     file = db_sess.query(Files).filter(Files.id == notebook_id).first()
     postfix = str(lecture_id) + '.pdf' if lecture_id > 9 else '0' + str(lecture_id) + '.pdf'
     path = file.body[:-6] + postfix
-    page_delete(path, page_number)
+    page_delete(os.path.join(basepath, path), page_number)
 
     return redirect(f"/lecture{notebook_id}-{lecture_id}")
 
