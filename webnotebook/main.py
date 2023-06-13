@@ -40,7 +40,7 @@ ru = translation_ru.gettext
 en = translation_en.gettext
 _ = ru
 
-basepath = os.path.dirname(__file__)[len(os.getcwd()) + 1:]
+basepath = os.path.dirname(__file__)
 print(os.getcwd())
 print(basepath)
 
@@ -483,7 +483,7 @@ def ch_translate(path):
 
 
 def run():
-    db_session.global_init(os.path.abspath("webnotebook/db/users.db"))
+    db_session.global_init(os.path.join(os.path.dirname(__file__), 'users.db'))
     app.run(port=8080, host='127.0.0.1')
 
 

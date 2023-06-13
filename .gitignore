@@ -6,3 +6,6 @@ __pycache__/*
 *.pot
 */.DS_Store
 /doc/build/*
+*.egg-info
+dist
+*.db
