@@ -81,7 +81,7 @@ class UserModelCase(unittest.TestCase):
                 self.db_sess.commit()
 
     def test_4(self):
-        path = "static/sources/pdf_test"
+        path = "webnotebook/static/sources/pdf_test"
         self.assertEqual(connect_pdf(path), path + "/test_00.pdf")
 
         file = open(path + "/test_00.pdf", 'rb')
@@ -109,7 +109,7 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(totalpages, sum_of_pages)
 
     def test_5(self):
-        path = "static/sources/pdf_test/test_03.pdf"
+        path = "webnotebook/static/sources/pdf_test/test_03.pdf"
         file = open(path, 'rb')
         readpdf = PyPDF2.PdfReader(file)
         totalpages_before = len(readpdf.pages)
@@ -125,14 +125,14 @@ class UserModelCase(unittest.TestCase):
         self.assertEqual(totalpages_before - 1, totalpages_after)
 
     def test_6(self):
-        path_to_pdf = "static/sources/pdf_test/test_03.pdf"
+        path_to_pdf = "webnotebook/static/sources/pdf_test/test_03.pdf"
 
         file = open(path_to_pdf, 'rb')
         readpdf = PyPDF2.PdfReader(file)
         totalpages_before = len(readpdf.pages)
         file.close()
 
-        path_to_pic = "static/sources/pdf_test/boot.png"
+        path_to_pic = "webnotebook/static/sources/pic_test/boot.png"
         add_page(path_to_pdf, path_to_pic, 1)
 
         file = open(path_to_pdf, 'rb')
